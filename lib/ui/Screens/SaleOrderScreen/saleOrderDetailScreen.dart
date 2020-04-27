@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sale_order_app/config/appTheme.dart';
+import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderDetailScreenListCard.dart';
 
-import 'package:sale_order_app/ui/Screens/deliveryChallanScreen/dcDetailScreenListCard.dart';
 
-class DCDetailScreen extends StatefulWidget {
+class SaleOrderDetailScreen extends StatefulWidget {
   @override
-  _DCDetailScreenState createState() => _DCDetailScreenState();
+  _SaleOrderDetailScreenState createState() => _SaleOrderDetailScreenState();
 }
 
-class _DCDetailScreenState extends State<DCDetailScreen> {
+class _SaleOrderDetailScreenState extends State<SaleOrderDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -224,7 +224,7 @@ class _DCDetailScreenState extends State<DCDetailScreen> {
                       //  }
                       //  else{
 
-                      return DCDetailScreenListCard(
+                      return SaleOrderDetailScreenListCard(
                           // items: thisListItems,
 
                           );

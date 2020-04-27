@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/ui/Screens/DOScreen/doListCard.dart';
-import 'package:sale_order_app/ui/Screens/deliveryChallanScreen/Widgets/listCard.dart';
+
 
 
 class DOListScreen extends StatefulWidget {

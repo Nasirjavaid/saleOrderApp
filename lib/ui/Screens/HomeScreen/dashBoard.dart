@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/ui/Screens/DOScreen/doListScreen.dart';
 import 'package:charts_flutter/flutter.dart' as chart;
-import 'package:sale_order_app/ui/Screens/deliveryChallanScreen/deliveryChallanListScreen.dart';
+import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderListScreen.dart';
 
 class Dashboard extends StatelessWidget {
   @override
@@ -549,9 +549,9 @@ class _DashboardBodyState extends State<DashboardBody> {
                       color: Colors.blueGrey,
 
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.symmetric(horizontal:20.0),
                         child: Center(
-                          child: Text("Delivery Challan",
+                          child: Text("Sale Order",
                               style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w700,
@@ -589,7 +589,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    DeliceryChallanListScreen()));
+                                    SaleOrderListScreen()));
                       },
                     ),
 
