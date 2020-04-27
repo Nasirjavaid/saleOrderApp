@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sale_order_app/config/appTheme.dart';
+import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:sale_order_app/ui/Screens/HomeScreen/dashBoard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginScreen> {
         child: CircleAvatar(
           backgroundColor: Colors.transparent,
           radius: 30.0,
-          child: Image.asset('images/logo.png'), 
+          child: Image.asset('images/logo.png'),
           // child: Icon(
           //   Icons.person_pin,
           //   color: Colors.white70,
@@ -46,7 +47,6 @@ class _LoginPageState extends State<LoginScreen> {
     ]);
 
     final email = TextFormField(
-   
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.words,
       autocorrect: false,
@@ -59,8 +59,6 @@ class _LoginPageState extends State<LoginScreen> {
         //fontFamily: ScreensFontFamlty.FONT_FAMILTY
       ),
       decoration: InputDecoration(
-
-        
           counterText: "",
           prefixIcon: Icon(
             Icons.person,
@@ -87,14 +85,13 @@ class _LoginPageState extends State<LoginScreen> {
                   width: 2.0),
               borderRadius: BorderRadius.all(Radius.circular(25))),
           hintText: "Email",
-          hintStyle: TextStyle(
-            color:  Color(0xFF72868a), fontWeight: FontWeight.w500
-            //fontFamily: ScreensFontFamlty.FONT_FAMILTY
-          ),
+          hintStyle:
+              TextStyle(color: Color(0xFF72868a), fontWeight: FontWeight.w500
+                  //fontFamily: ScreensFontFamlty.FONT_FAMILTY
+                  ),
           filled: true,
           fillColor: Color(0xFFe4f4f7),
-          errorStyle:
-              TextStyle(color: Color(0xFF72868a))),
+          errorStyle: TextStyle(color: Color(0xFF72868a))),
       validator: (String email) {
         if (email.isEmpty) {
           return "Please enter email";
@@ -106,7 +103,7 @@ class _LoginPageState extends State<LoginScreen> {
 
     final password = TextFormField(
       obscureText: true,
-     // cursorColor: Color.fromRGBO(64, 75, 96, .9),
+      // cursorColor: Color.fromRGBO(64, 75, 96, .9),
       keyboardType: TextInputType.text,
       textCapitalization: TextCapitalization.words,
       autocorrect: false,
@@ -145,14 +142,13 @@ class _LoginPageState extends State<LoginScreen> {
                   width: 2.0),
               borderRadius: BorderRadius.all(Radius.circular(25))),
           hintText: "Password",
-          hintStyle: TextStyle(
-            color:  Color(0xFF72868a), fontWeight: FontWeight.w500
-            //fontFamily: ScreensFontFamlty.FONT_FAMILTY
-          ),
+          hintStyle:
+              TextStyle(color: Color(0xFF72868a), fontWeight: FontWeight.w500
+                  //fontFamily: ScreensFontFamlty.FONT_FAMILTY
+                  ),
           filled: true,
           fillColor: Color(0xFFe4f4f7),
-          errorStyle:
-              TextStyle(color:Color(0xFF72868a))),
+          errorStyle: TextStyle(color: Color(0xFF72868a))),
       validator: (String password) {
         if (password.isEmpty) {
           return "Please enter password";
@@ -181,16 +177,35 @@ class _LoginPageState extends State<LoginScreen> {
         ),
         onPressed: () {
           if (_formKey.currentState.validate()) {
+
+
+
+              LoginPrefrences loginPrefrences = LoginPrefrences();
+              loginPrefrences.setUser(true);
+
             //   // If the form is valid, display a Snackbar.
             //  Scaffold.of(context).showSnackBar(snackBar);
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Dashboard()),
-            );
+            Navigator.pushAndRemoveUntil(
+                context,
+                PageRouteBuilder(pageBuilder: (BuildContext context,
+                    Animation animation, Animation secondaryAnimation) {
+                  return Dashboard();
+                }, transitionsBuilder: (BuildContext context,
+                    Animation<double> animation,
+                    Animation<double> secondaryAnimation,
+                    Widget child) {
+                  return new SlideTransition(
+                    position: new Tween<Offset>(
+                      begin: const Offset(1.0, 0.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                }),
+                (Route route) => false);
           }
         },
         padding: EdgeInsets.all(12),
-        
         color: AppTheme.appBackgroundColor,
         child: Text('Log In', style: TextStyle(color: Colors.white)),
       ),

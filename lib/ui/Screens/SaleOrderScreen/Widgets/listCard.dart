@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sale_order_app/config/appTheme.dart';
-import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderDetailScreen.dart';
+import 'package:sale_order_app/config/constents.dart';
 import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderDetailScreenListCard.dart';
 
 class ListCard extends StatelessWidget {
-  //Items items;
 
   ListCard({
     Key key,
@@ -38,114 +37,121 @@ class ListCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 0.0, bottom: 0),
               child: Column(
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Vision plus",
-                      style: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Text(
+                  //     "Vision plus",
+                  //     style: TextStyle(
+                  //         color: Colors.black87,
+                  //         fontWeight: FontWeight.bold,
+                  //         fontSize: 18),
+                  //   ),
+                  // ),
                   Card(
-                      color: AppTheme.appBackgroundColorforCard1,
-                      elevation: 0,
-                    
-                        child: Column(
+                    color: AppTheme.appBackgroundColorforCard1,
+                    elevation: 0,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(top:12.0,bottom: 5),
+                          child: Text(
+                            "Ali Ahmad",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                        ),
+                        // Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        //     children: <Widget>[
+                        //       Text("Customer Name",
+                        //           style: TextStyle(
+                        //               color: Colors.white70,
+                        //               fontWeight: FontWeight.w500,
+                        //               fontSize: 14)),
+                        //       SizedBox(
+                        //         width: 5,
+                        //       ),
+                        //       Container(
+                        //           height: 25,
+                        //           decoration: BoxDecoration(
+                        //               borderRadius: BorderRadius.only(
+                        //                   topLeft: Radius.circular(5.0),
+                        //                   bottomRight: Radius.circular(5.0),
+                        //                   bottomLeft: Radius.circular(5),
+                        //                   topRight: Radius.circular(5))),
+                        //           child: Padding(
+                        //             padding: const EdgeInsets.only(right: 5),
+                        //             child: Center(
+                        //                 child: Text("Bilal Ahmad",
+                        //                     style: TextStyle(
+                        //                         color: Colors.white70,
+                        //                         fontWeight: FontWeight.w700,
+                        //                         fontSize: 14))),
+                        //           )),
+                        //     ]),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: <Widget>[
-                                  Text("Customer Name",
-                                      style: TextStyle(
-                                          color: Colors.white70,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14)),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Container(
-                                      height: 25,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5.0),
-                                              bottomRight: Radius.circular(5.0),
-                                              bottomLeft: Radius.circular(5),
-                                              topRight: Radius.circular(5))),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 5),
-                                        child: Center(
-                                            child: Text("Bilal Ahmad",
-                                                style: TextStyle(
-                                                    color: Colors.white70,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 14))),
-                                      )),
-                                ]),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                Row(children: <Widget>[
-                                  Text("SO# :",
-                                      style: TextStyle(
-                                          color: Colors.white70,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 10)),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Container(
-                                      height: 25,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5.0),
-                                              bottomRight: Radius.circular(5.0),
-                                              bottomLeft: Radius.circular(5),
-                                              topRight: Radius.circular(5))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 0, horizontal: 0),
-                                        child: Center(
-                                            child: Text("4567",
-                                                style: TextStyle(
-                                                    color: Colors.white70,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 12))),
-                                      )),
-                                ]),
-                                Row(children: <Widget>[
-                                  // ),
-                                  Container(
-                                      height: 25,
-                                      // width: MediaQuery.of(context).size.width -
-                                      //     MediaQuery.of(context).size.width * 0.5,
-                                      decoration: BoxDecoration(
-                                          // border:
-                                          //     Border.all(width: 1, color: Colors.white30),
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5.0),
-                                              bottomRight: Radius.circular(5.0),
-                                              bottomLeft: Radius.circular(5),
-                                              topRight: Radius.circular(5))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 0, horizontal: 0),
-                                        child: Center(
-                                            child: Text("18/04/2020",
-                                                style: TextStyle(
-                                                    color: Colors.white70,
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 12))),
-                                      )),
-                                ])
-                              ],
-                            ),
+                            Row(children: <Widget>[
+                              Text("SO# :",
+                                  style: TextStyle(
+                                      color: Colors.white70,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 12)),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                  height: 25,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5.0),
+                                          bottomRight: Radius.circular(5.0),
+                                          bottomLeft: Radius.circular(5),
+                                          topRight: Radius.circular(5))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 0),
+                                    child: Center(
+                                        child: Text("4567",
+                                            style: TextStyle(
+                                                color: Colors.white70,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12))),
+                                  )),
+                            ]),
+                            Row(children: <Widget>[
+                              // ),
+                              Container(
+                                  height: 25,
+                                  // width: MediaQuery.of(context).size.width -
+                                  //     MediaQuery.of(context).size.width * 0.5,
+                                  decoration: BoxDecoration(
+                                      // border:
+                                      //     Border.all(width: 1, color: Colors.white30),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(5.0),
+                                          bottomRight: Radius.circular(5.0),
+                                          bottomLeft: Radius.circular(5),
+                                          topRight: Radius.circular(5))),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 0),
+                                    child: Center(
+                                        child: Text("18/04/2020",
+                                            style: TextStyle(
+                                                color: Colors.white70,
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 12))),
+                                  )),
+                            ])
                           ],
                         ),
-                      ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -214,10 +220,10 @@ class ListCard extends StatelessWidget {
             // trailing:
             //     Icon(Icons.keyboard_arrow_right, color: Colors.white, size: 30.0),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SaleOrderDetailScreen()));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => SaleOrderDetailScreen()));
             }),
       ),
     ));
@@ -304,7 +310,7 @@ class ListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("8963435443",
+                          child: new Text("${Constents.numbaerFormate.format(126789)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -370,7 +376,7 @@ class ListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("8963435443",
+                          child: new Text("${Constents.numbaerFormate.format(506789)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -437,7 +443,7 @@ class ListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("8963435443",
+                          child: new Text("${Constents.numbaerFormate.format(564389)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -503,7 +509,7 @@ class ListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("8963435443",
+                          child: new Text("${Constents.numbaerFormate.format(126789)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,

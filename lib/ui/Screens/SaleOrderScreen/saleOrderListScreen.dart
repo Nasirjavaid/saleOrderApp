@@ -18,7 +18,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen > {
           leading: BackButton(
      color: Colors.black
    ), 
-        title: Text("Delivery challan",style:TextStyle(color: Colors.black87)),
+        title: Text("Sale order",style:TextStyle(color: Colors.black87)),
         backgroundColor: Colors.white,
       ),
        // backgroundColor: AppColors.loginGradientStart,

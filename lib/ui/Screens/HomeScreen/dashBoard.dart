@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:sale_order_app/config/appTheme.dart';
+import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:sale_order_app/ui/Screens/DOScreen/doListScreen.dart';
 import 'package:charts_flutter/flutter.dart' as chart;
+import 'package:sale_order_app/ui/Screens/LoginScreen/loginScreen.dart';
 import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderListScreen.dart';
+import 'package:sale_order_app/config/constents.dart';
 
 class Dashboard extends StatelessWidget {
   @override
@@ -122,9 +125,11 @@ class _DashboardBodyState extends State<DashboardBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       //backgroundColor: Theme.of(context).colorScheme.primary,
       // backgroundColor:Colors.black,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text("Vision Plus",
@@ -132,6 +137,21 @@ class _DashboardBodyState extends State<DashboardBody> {
                 color: Colors.black54,
                 fontSize: 27,
                 fontWeight: FontWeight.w700)),
+
+
+                actions: <Widget>[
+
+                  GestureDetector(
+                                      child: Padding(
+                      padding: const EdgeInsets.only(right:15.0),
+                      child: Icon(Icons.settings_power,color: Colors.black87),
+                    ),
+                    onTap: ()
+                    {
+                      showAlertDialog(context);
+                    },
+                  )
+                ],
 
         //  Row(
         //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -275,7 +295,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                               child: new SizedBox(
                                 width: 120,
                                 // height: 30,
-                                child: new Text("8963443 M",
+                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
                                     softWrap: false,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -349,7 +369,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                               child: new SizedBox(
                                 width: 120,
                                 // height: 30,
-                                child: new Text("8963443 M",
+                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
                                     softWrap: false,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -435,7 +455,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                               child: new SizedBox(
                                 width: 120,
                                 // height: 30,
-                                child: new Text("8963443 M",
+                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
                                     softWrap: false,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -497,7 +517,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                               child: new SizedBox(
                                 width: 120,
                                 // height: 30,
-                                child: new Text("8963443 M",
+                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
                                     softWrap: false,
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 1,
@@ -792,4 +812,62 @@ class _DashboardBodyState extends State<DashboardBody> {
       ],
     );
   }
+
+   
+showAlertDialog(BuildContext context) {
+
+  // set up the buttons
+  Widget cancelButton = FlatButton(
+    child: Text("Cancel",style: TextStyle(color:Colors.black87),),
+    onPressed:  () {
+
+        Navigator.pop(context);
+
+    },
+  );
+  Widget continueButton = FlatButton(
+    child: Text("Continue",style: TextStyle(color:Colors.black87),),
+    onPressed:  () {
+
+      LoginPrefrences loginPrefrences = LoginPrefrences();
+              loginPrefrences.setUser(false);
+
+        Navigator.pushAndRemoveUntil(
+      context,
+      PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
+          Animation secondaryAnimation) {
+        return LoginScreen();
+      }, transitionsBuilder: (BuildContext context, Animation<double> animation,
+          Animation<double> secondaryAnimation, Widget child) {
+        return new SlideTransition(
+          position: new Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation),
+          child: child,
+        );
+      }),
+      (Route route) => false);
+
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Logout !"),
+    content: Text("Do you want to Logout?"),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
 }

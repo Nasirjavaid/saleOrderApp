@@ -26,50 +26,52 @@ class _DOListScreenState extends State<DOListScreen > {
         // backgroundColor: Theme.of(context).colorScheme.primary,
     
        // backgroundColor: AppColors.loginGradientStart,
-        body: Container(
-          decoration: BoxDecoration(
-            
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(top:8.0),
-            child: ListView.builder(
-                // controller: lazyListscrollController,
-                //  itemCount: globalItemsList.data.length,
-                itemCount: 20,
-                itemBuilder: (BuildContext context, int index) {
-                  // Items thisListItems = globalItemsList
-                  //  .data[index];
-                  // (snapshot.data[snapshot.data.length - index].title);
-                  //  if (index == globalItemsList.data.length - 1) {
-                  print("length matched");
-                  // return Padding(
-                  //   padding: const EdgeInsets.only(bottom: 18.0),
-                  //   child: Column(
-                  //     mainAxisAlignment: MainAxisAlignment.center,
-                  //     mainAxisSize: MainAxisSize.min,
-                  //     children: <Widget>[
-                  //       SizedBox(
-                  //         width: 18,
-                  //         height: 18,
-                  //         child: CircularProgressIndicator(
-                  //           strokeWidth: 2.5,
-                  //         ),
-                  //       ),
+        body: SingleChildScrollView(
+                  child: Container(
+          
+            child: Padding(
+              padding: const EdgeInsets.only(top:8.0),
+              child: ListView.builder(
+                 physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                  // controller: lazyListscrollController,
+                  //  itemCount: globalItemsList.data.length,
+                  itemCount: 20,
+                  itemBuilder: (BuildContext context, int index) {
+                    // Items thisListItems = globalItemsList
+                    //  .data[index];
+                    // (snapshot.data[snapshot.data.length - index].title);
+                    //  if (index == globalItemsList.data.length - 1) {
+                    print("length matched");
+                    // return Padding(
+                    //   padding: const EdgeInsets.only(bottom: 18.0),
+                    //   child: Column(
+                    //     mainAxisAlignment: MainAxisAlignment.center,
+                    //     mainAxisSize: MainAxisSize.min,
+                    //     children: <Widget>[
+                    //       SizedBox(
+                    //         width: 18,
+                    //         height: 18,
+                    //         child: CircularProgressIndicator(
+                    //           strokeWidth: 2.5,
+                    //         ),
+                    //       ),
 
-                  //     ],
-                  //   ),
-                  // );
-                  //  }
-                  //  else{
+                    //     ],
+                    //   ),
+                    // );
+                    //  }
+                    //  else{
 
-                          return DOListCard(
-                   // items: thisListItems,
+                            return DOListCard(
+                     // items: thisListItems,
 
-                   );
-                }
-                //   },
+                     );
+                  }
+                  //   },
 
-                ),
+                  ),
+            ),
           ),
         ),
       ),

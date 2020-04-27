@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sale_order_app/config/appTheme.dart';
+import 'package:sale_order_app/config/constents.dart';
+
 
 class SaleOrderDetailScreenListCard extends StatelessWidget {
   //Items items;
+
+
 
   SaleOrderDetailScreenListCard({
     Key key,
@@ -26,7 +29,7 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 1.0),
             child: Card(
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.white,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(2)),
               elevation: 1,
@@ -58,19 +61,19 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                       Flexible(
                         child: Container(
                           width: 80,
-                          decoration: BoxDecoration(
-                              color: AppTheme.appBackgroundColorforCard1,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0.0),
-                                  bottomRight: Radius.circular(2.0),
-                                  bottomLeft: Radius.circular(0),
-                                  topRight: Radius.circular(2))),
+                          // decoration: BoxDecoration(
+                          //     color: AppTheme.appBackgroundColorforCard1,
+                          //     borderRadius: BorderRadius.only(
+                          //         topLeft: Radius.circular(0.0),
+                          //         bottomRight: Radius.circular(2.0),
+                          //         bottomLeft: Radius.circular(0),
+                          //         topRight: Radius.circular(2))),
                           height: MediaQuery.of(context).size.height,
                           
                             child: Center(
-                              child: Text("4577767",
+                              child: Text("${Constents.numbaerFormate.format(123456789)}",
                                 style: TextStyle(
-                                    color: Colors.white70,
+                                    color: Colors.black87,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 11)),
                             ),
