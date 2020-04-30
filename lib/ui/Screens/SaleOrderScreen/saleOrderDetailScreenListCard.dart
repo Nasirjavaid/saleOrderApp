@@ -72,21 +72,27 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                             //         topRight: Radius.circular(2))),
                             height: MediaQuery.of(context).size.height,
 
-                            child: Center(
-                              child: items.saleAmount == null
-                                  ? Text("N/A",
-                                      style: TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 11))
-                                  : Text(
-                                      "${Constents.numbaerFormate.format(items.saleAmount)}",
-                                      style: TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 11)),
-                            ),
+                            child:Align(
+                                 alignment: Alignment.centerRight,
+                                                          child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Container(
+                                  child: items.saleAmount == null
+                                      ? Text("N/A",
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))
+                                      : Text(
+                                          "${Constents.numbaerFormate.format(items.saleAmount)}",
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11)),
+                                
                           ),
+                              ),
+                            )),
                           flex: 1,
                         )
                       ]),

@@ -37,7 +37,7 @@ class AppTypographyStyles {
       fontSize: 13);
 
   static TextStyle headingTextStyle =
-      TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold);
+      TextStyle(color: Colors.white70, fontWeight: FontWeight.bold);
 
   static TextStyle mainHeadingTextStyle = TextStyle(
       fontWeight: FontWeight.w700, fontSize: 22, color: Colors.white);
