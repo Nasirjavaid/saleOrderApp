@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:sale_order_app/Models/saleOrder.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
 import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderDetailScreenListCard.dart';
 
-class DOListCard extends StatelessWidget {
-  //Items items;
+class SOListCard extends StatelessWidget {
 
-  DOListCard({
+SaleOrder saleOrder;
+  SOListCard({
     Key key,
-    // this.items,
+     this.saleOrder,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-        // height: 75,
-        child: Card(
-      color: Colors.white,
-      elevation: 2.0,
+    return Card(
+       elevation: 8.0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        child: Container(
+      decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+          ),
+   
       margin: new EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
       child: Container(
         // decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
@@ -54,14 +59,22 @@ class DOListCard extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.only(top:12.0,bottom: 5),
-                          child: Text(
-                            "Ahmad Bilal",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
+                          padding: const EdgeInsets.only(top: 12.0, bottom: 5),
+                          child: saleOrder.name == null
+                              ? Text(
+                                  "N/A",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                )
+                              : Text(
+                                  "${saleOrder.name}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
+                                ),
                         ),
                         // Row(
                         //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -85,7 +98,7 @@ class DOListCard extends StatelessWidget {
                         //           child: Padding(
                         //             padding: const EdgeInsets.only(right: 5),
                         //             child: Center(
-                        //                 child: Text("Ali Ahmad",
+                        //                 child: Text("Bilal Ahmad",
                         //                     style: TextStyle(
                         //                         color: Colors.white70,
                         //                         fontWeight: FontWeight.w700,
@@ -96,7 +109,7 @@ class DOListCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
                             Row(children: <Widget>[
-                              Text("DO# :",
+                              Text("SO# :",
                                   style: TextStyle(
                                       color: Colors.white70,
                                       fontWeight: FontWeight.w500,
@@ -104,7 +117,7 @@ class DOListCard extends StatelessWidget {
                               SizedBox(
                                 width: 5,
                               ),
-                              Container(
+                                  Container(
                                   height: 25,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.only(
@@ -116,17 +129,21 @@ class DOListCard extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 0, horizontal: 0),
                                     child: Center(
-                                        child: Text("4567",
-                                            style: TextStyle(
-                                                color: Colors.white70,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 12))),
+                                        child: saleOrder.sO == null
+                                            ? Text("N/A",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 12))
+                                            : Text(
+                                                "${saleOrder.sO.toString()}",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 12))),
                                   )),
                             ]),
-                            Row(
-                            
-                              
-                              children: <Widget>[
+                            Row(children: <Widget>[
                               // ),
                               Container(
                                   height: 25,
@@ -144,11 +161,17 @@ class DOListCard extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 0, horizontal: 0),
                                     child: Center(
-                                        child: Text("18/04/2020",
-                                            style: TextStyle(
-                                                color: Colors.white70,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: 12))),
+                                        child: saleOrder.date == null
+                                            ? Text("--:--:--",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 12))
+                                            : Text("${saleOrder.date}",
+                                                style: TextStyle(
+                                                    color: Colors.white70,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 12))),
                                   )),
                             ])
                           ],
@@ -179,7 +202,7 @@ class DOListCard extends StatelessWidget {
                       physics: ScrollPhysics(),
                       // controller: lazyListscrollController,
                       //  itemCount: globalItemsList.data.length,
-                      itemCount: 5,
+                      itemCount: saleOrder.items.length,
                       itemBuilder: (BuildContext context, int index) {
                         // Items thisListItems = globalItemsList
                         //  .data[index];
@@ -207,7 +230,7 @@ class DOListCard extends StatelessWidget {
                         //  else{
 
                         return SaleOrderDetailScreenListCard(
-                            // items: thisListItems,
+                           items:saleOrder.items[index],
 
                             );
                       }
@@ -216,7 +239,7 @@ class DOListCard extends StatelessWidget {
                       ),
                 ),
 
-                bottomPart(context),
+                bottomPart(context,saleOrder),
                 bottomButtons(context)
               ],
             ),
@@ -232,8 +255,7 @@ class DOListCard extends StatelessWidget {
       ),
     ));
   }
-
-  Widget bottomPart(BuildContext context) {
+ Widget bottomPart(BuildContext context,SaleOrder saleOrder) {
     return Container(
         // decoration: BoxDecoration(
         //   // color: Colors.grey,
@@ -314,7 +336,11 @@ class DOListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("${Constents.numbaerFormate.format(126789)}",
+                          child: saleOrder.balance == null ? Text("N/A", style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12)) : Text(
+                              "${Constents.numbaerFormate.format(saleOrder.balance)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -380,7 +406,11 @@ class DOListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("${Constents.numbaerFormate.format(126789)}",
+                          child: saleOrder.limit == null ? Text("N/A", style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12)) : Text(
+                              "${Constents.numbaerFormate.format(saleOrder.limit)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -447,7 +477,11 @@ class DOListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("${Constents.numbaerFormate.format(126789)}",
+                          child: saleOrder.thisSO == null ? Text("N/A", style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12)) : Text(
+                              "${Constents.numbaerFormate.format(saleOrder.thisSO)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -513,7 +547,11 @@ class DOListCard extends StatelessWidget {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: new Text("${Constents.numbaerFormate.format(126789)}",
+                          child: saleOrder.balance_ == null ? Text("N/A", style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12)) : Text(
+                              "${Constents.numbaerFormate.format(saleOrder.balance_)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,

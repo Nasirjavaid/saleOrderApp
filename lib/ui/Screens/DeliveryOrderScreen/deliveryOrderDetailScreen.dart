@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 
-import 'package:sale_order_app/ui/Screens/DOScreen/doDetailScreenListCard.dart';
+
 
 class DODetailScreen extends StatefulWidget {
   @override
@@ -225,10 +225,10 @@ class _DODetailScreenState extends State<DODetailScreen> {
                         //  }
                         //  else{
 
-                        return DODetailScreenListCard(
-                            // items: thisListItems,
+                        // return DODetailScreenListCard(
+                        //     // items: thisListItems,
 
-                            );
+                        //     );
                       }
                       //   },
 

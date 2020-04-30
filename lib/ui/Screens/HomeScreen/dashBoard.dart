@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:sale_order_app/CommonWidegets/commonWidgets..dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/darkThemePrefrences.dart';
-import 'package:sale_order_app/ui/Screens/DOScreen/doListScreen.dart';
+import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderListScreen.dart';
 import 'package:charts_flutter/flutter.dart' as chart;
 import 'package:sale_order_app/ui/Screens/LoginScreen/loginScreen.dart';
 import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderListScreen.dart';
 import 'package:sale_order_app/config/constents.dart';
+import 'package:sale_order_app/Services/summaryService.dart';
+import 'package:sale_order_app/Network/apiResponce.dart';
+import 'package:get_it/get_it.dart';
+import 'package:sale_order_app/Models/sammury.dart';
+import 'package:sale_order_app/config/methods.dart';
+import 'package:connectivity/connectivity.dart';
 
 class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  //   return Consumer<AppState>(
-  //     builder: (context, appState, _) {
-  //       return MaterialApp(
-  //         debugShowCheckedModeBanner: false,
-  //         theme: AppTheme.lightTheme,
-  //         darkTheme: AppTheme.darkTheme,
-  //         themeMode: appState.darkTheme ? ThemeMode.dark : ThemeMode.light,
-  //         home: Container(child: DashboardBody()),
-  //       );
-  //     },
-  //   );
-  // }
+    //   return Consumer<AppState>(
+    //     builder: (context, appState, _) {
+    //       return MaterialApp(
+    //         debugShowCheckedModeBanner: false,
+    //         theme: AppTheme.lightTheme,
+    //         darkTheme: AppTheme.darkTheme,
+    //         themeMode: appState.darkTheme ? ThemeMode.dark : ThemeMode.light,
+    //         home: Container(child: DashboardBody()),
+    //       );
+    //     },
+    //   );
+    // }
 
-  return Container(child:DashboardBody());
-}}
+    return Container(child: DashboardBody());
+  }
+}
 
 class DashboardBody extends StatefulWidget {
   static final String path = "lib/src/pages/dashboard/dash2.dart";
@@ -45,6 +53,17 @@ class addCahrts {
 }
 
 class _DashboardBodyState extends State<DashboardBody> {
+  //Getting user service to get Summary
+  SummaryService get summaryService => GetIt.I<SummaryService>();
+
+  //Api responce call for Summary
+  APIResponce<Summary> apiResponce;
+  bool isLoading = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
+
   final TextStyle whiteText = TextStyle(color: Colors.white);
 
   String actualDropdown = DashboardBody.chartDropdownItems[0];
@@ -83,15 +102,82 @@ class _DashboardBodyState extends State<DashboardBody> {
   void initState() {
     // TODO: implement initState
 
+    //callinf main data functon for this screen
+    netWorkChek();
+    //_fetchSammury();
+
+    super.initState();
+  }
+
+  netWorkChek() async {
+    await NetworkConnectivity.check().then((internet) async {
+      // clear past user
+
+      if (internet) {
+        _fetchSammury();
+      } else {
+        //show network erro
+        showMessageError("Network is not avalable !!!");
+      }
+    });
+  }
+
+  void showMessageSuccess(String message, [MaterialColor color = Colors.blue]) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      backgroundColor: color,
+      content: new Text(
+        message,
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+  void showMessageError(String message, [MaterialColor color = Colors.red]) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      backgroundColor: color,
+      content: new Text(
+        message,
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+// fetching the Dashboard data
+  _fetchSammury() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    apiResponce = await summaryService.getSammury();
+
     setState(() {
       var data = [
-        addCahrts("Mon", 40),
-        addCahrts("Tue", 30),
-        addCahrts("Wed", 60),
-        addCahrts("Thu", 80),
-        addCahrts("Fri", 50),
-        addCahrts("Sat", 10),
-        addCahrts("sun", 90),
+        addCahrts(
+            "Jan", apiResponce.data.jan != null ? apiResponce.data.jan : 10),
+        addCahrts(
+            "Feb", apiResponce.data.feb != null ? apiResponce.data.feb : 10),
+        addCahrts(
+            "Mar", apiResponce.data.mar != null ? apiResponce.data.mar : 10),
+        addCahrts(
+            "Apr", apiResponce.data.apr != null ? apiResponce.data.apr : 10),
+        addCahrts(
+            "May", apiResponce.data.may != null ? apiResponce.data.may : 10),
+        addCahrts(
+            "Jun", apiResponce.data.jun != null ? apiResponce.data.jun : 10),
+        addCahrts(
+            "Jul", apiResponce.data.jul != null ? apiResponce.data.jul : 10),
+        addCahrts(
+            "Aug", apiResponce.data.aug != null ? apiResponce.data.aug : 10),
+        addCahrts(
+            "Sep", apiResponce.data.sep != null ? apiResponce.data.sep : 10),
+        addCahrts(
+            "Oct", apiResponce.data.oct != null ? apiResponce.data.oct : 10),
+        addCahrts(
+            "Nov", apiResponce.data.nov != null ? apiResponce.data.nov : 10),
+        addCahrts(
+            "Dec", apiResponce.data.dec != null ? apiResponce.data.dec : 10),
       ];
       // data =  charts[actualChart];
 
@@ -106,89 +192,100 @@ class _DashboardBodyState extends State<DashboardBody> {
             )
       ];
 
-      piChartDisplay = chartDisplay = chart.PieChart(
-        series,
-        animationDuration: Duration(microseconds: 2000),
-      );
-
       chartDisplay = chart.BarChart(
         series,
         animationDuration: Duration(microseconds: 2000),
       );
     });
 
-    super.initState();
-  }
+    // print("responceApi error in dashBoard ${apiResponce.errorMessage}");
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    if (apiResponce.data == null) {
+      setState(() {
+        isLoading = false;
+      });
+      showMessageError("Something went wrong !!!");
+    } else if (apiResponce.error) {
+      setState(() {
+        isLoading = false;
+      });
+      showMessageError("Something went wrong !!!");
+    }
+// print("${apiResponce.data.apr}");
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      //backgroundColor: Theme.of(context).colorScheme.primary,
-      // backgroundColor:Colors.black,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text("Vision Plus",
-            style: TextStyle(
-                color: Colors.black54,
-                fontSize: 27,
-                fontWeight: FontWeight.w700)),
+        key: _scaffoldKey,
+        //backgroundColor: Theme.of(context).colorScheme.primary,
+        // backgroundColor:Colors.black,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text("Vision Plus",
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 27,
+                  fontWeight: FontWeight.w700)),
 
+          actions: <Widget>[
+            GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: Icon(Icons.settings_power, color: Colors.black87),
+              ),
+              onTap: () {
+                showAlertDialog(context);
+              },
+            )
+          ],
 
-                actions: <Widget>[
+          //  Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   mainAxisSize: MainAxisSize.max,
+          //   children: <Widget>[
+          //     Text("Vision Plus", style: Theme.of(context).textTheme.display1),
+          //     // GestureDetector(
+          //     //   child: Icon(
+          //     //     Icons.settings,
+          //     //   ),
+          //     //   onTap: () {
+          //     //     Navigator.push(
+          //     //       context,
+          //     //       MaterialPageRoute(builder: (context) => Settings()),
+          //     //     );
+          //     //   },
+          //     // ),
+          //   ],
+          // ),
 
-                  GestureDetector(
-                                      child: Padding(
-                      padding: const EdgeInsets.only(right:15.0),
-                      child: Icon(Icons.settings_power,color: Colors.black87),
-                    ),
-                    onTap: ()
-                    {
-                      showAlertDialog(context);
-                    },
-                  )
-                ],
+          centerTitle: true,
+        ),
+        body: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () {
+            return netWorkChek();
+          },
+          child: Builder(
+            builder: (_) {
+              if (isLoading) {
+                return CommonWidgets.progressIndicator;
+              }
 
-        //  Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   mainAxisSize: MainAxisSize.max,
-        //   children: <Widget>[
-        //     Text("Vision Plus", style: Theme.of(context).textTheme.display1),
-        //     // GestureDetector(
-        //     //   child: Icon(
-        //     //     Icons.settings,
-        //     //   ),
-        //     //   onTap: () {
-        //     //     Navigator.push(
-        //     //       context,
-        //     //       MaterialPageRoute(builder: (context) => Settings()),
-        //     //     );
-        //     //   },
-        //     // ),
-        //   ],
-        // ),
+              if (apiResponce == null) {
+                // print("responceApi error in dashBoard ${apiResponce.errorMessage}");
+                return _buildBody(context);
+              }
 
-        centerTitle: true,
-      ),
-      body: Stack(children: <Widget>[
-        // Container(
-        //   height: 300,
-        //   decoration: BoxDecoration(
-        //       color: Color(0xFF2193b0),
-        //       borderRadius: BorderRadius.only(
-        //           topLeft: Radius.circular(0.0),
-        //           bottomRight: Radius.circular(0.0),
-        //           bottomLeft: Radius.circular(100),
-        //           topRight: Radius.circular(0))),
-        // ),
-
-        _buildBody(context)
-      ]),
-    );
+              return _buildBody(context);
+            },
+          ),
+        ));
   }
 
   Widget _buildBody(BuildContext context) {
@@ -293,17 +390,23 @@ class _DashboardBodyState extends State<DashboardBody> {
                             ),
                             new Flexible(
                               child: new SizedBox(
-                                width: 120,
-                                // height: 30,
-                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
-                                    softWrap: false,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15)),
-                              ),
+                                  width: 120,
+                                  // height: 30,
+                                  child: apiResponce == null
+                                      ? Text("N/A",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))
+                                      : Text(
+                                          "${Constents.numbaerFormate.format(apiResponce.data.mTD) + " M"}",
+                                          softWrap: false,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))),
                             ),
                           ]),
                     ),
@@ -367,17 +470,23 @@ class _DashboardBodyState extends State<DashboardBody> {
                             ),
                             new Flexible(
                               child: new SizedBox(
-                                width: 120,
-                                // height: 30,
-                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
-                                    softWrap: false,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15)),
-                              ),
+                                  width: 120,
+                                  // height: 30,
+                                  child: apiResponce == null
+                                      ? Text("N/A",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))
+                                      : Text(
+                                          "${Constents.numbaerFormate.format(apiResponce.data.yTD) + " M"}",
+                                          softWrap: false,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))),
                             ),
                           ]),
                     ),
@@ -453,17 +562,23 @@ class _DashboardBodyState extends State<DashboardBody> {
                             ),
                             new Flexible(
                               child: new SizedBox(
-                                width: 120,
-                                // height: 30,
-                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
-                                    softWrap: false,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15)),
-                              ),
+                                  width: 120,
+                                  // height: 30,
+                                  child: apiResponce != null
+                                      ? Text(
+                                          "${Constents.numbaerFormate.format(apiResponce.data.receivable) + " M"}",
+                                          softWrap: false,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))
+                                      : Text("N/A",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))),
                             ),
                           ]),
                     ),
@@ -515,17 +630,23 @@ class _DashboardBodyState extends State<DashboardBody> {
                             ),
                             new Flexible(
                               child: new SizedBox(
-                                width: 120,
-                                // height: 30,
-                                child: new Text("${Constents.numbaerFormate.format(126789) +" M"}",
-                                    softWrap: false,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w800,
-                                        fontSize: 15)),
-                              ),
+                                  width: 120,
+                                  // height: 30,
+                                  child: apiResponce != null
+                                      ? Text(
+                                          "${Constents.numbaerFormate.format(apiResponce.data.pendingSO) + " M"}",
+                                          softWrap: false,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))
+                                      : Text("N/A",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 15))),
                             ),
                           ]),
                     ),
@@ -569,7 +690,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                       color: Colors.blueGrey,
 
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:20.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Center(
                           child: Text("Sale Order",
                               style: TextStyle(
@@ -605,57 +726,76 @@ class _DashboardBodyState extends State<DashboardBody> {
                       //     )),
 
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    SaleOrderListScreen()));
+                        NetworkConnectivity.check().then((internet) async {
+                          // clear past user
+
+                          if (internet) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SaleOrderListScreen()));
+                          } else {
+                            //show network erro
+                            showMessageError("Network is not avalable !!!");
+                          }
+                        });
                       },
                     ),
 
                     RaisedButton(
-                      color: Colors.blueGrey,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Center(
-                          child: Text("Delivery Order",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14)),
+                        color: Colors.blueGrey,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text("Delivery Order",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14)),
+                          ),
                         ),
-                      ),
-                      // SizedBox(
-                      //   width: 5,
-                      // ),
-                      // Container(
-                      //     height: 25,
-                      //     // width: MediaQuery.of(context).size.width -
-                      //     //     MediaQuery.of(context).size.width * 0.5,
-                      //     decoration: BoxDecoration(
-                      //         // border:
-                      //         //     Border.all(width: 1, color: Colors.white30),
-                      //         borderRadius: BorderRadius.only(
-                      //             topLeft: Radius.circular(5.0),
-                      //             bottomRight: Radius.circular(5.0),
-                      //             bottomLeft: Radius.circular(5),
-                      //             topRight: Radius.circular(5))),
-                      //     child: Padding(
-                      //       padding: const EdgeInsets.symmetric(
-                      //           vertical: 0, horizontal: 0),
-                      //       child: Center(
-                      //           child: Text("765765 M",
-                      //               style: TextStyle(
-                      //                   color: Colors.white,
-                      //                   fontWeight: FontWeight.w800,
-                      //                   fontSize: 15))),
-                      //     )),
+                        // SizedBox(
+                        //   width: 5,
+                        // ),
+                        // Container(
+                        //     height: 25,
+                        //     // width: MediaQuery.of(context).size.width -
+                        //     //     MediaQuery.of(context).size.width * 0.5,
+                        //     decoration: BoxDecoration(
+                        //         // border:
+                        //         //     Border.all(width: 1, color: Colors.white30),
+                        //         borderRadius: BorderRadius.only(
+                        //             topLeft: Radius.circular(5.0),
+                        //             bottomRight: Radius.circular(5.0),
+                        //             bottomLeft: Radius.circular(5),
+                        //             topRight: Radius.circular(5))),
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.symmetric(
+                        //           vertical: 0, horizontal: 0),
+                        //       child: Center(
+                        //           child: Text("765765 M",
+                        //               style: TextStyle(
+                        //                   color: Colors.white,
+                        //                   fontWeight: FontWeight.w800,
+                        //                   fontSize: 15))),
+                        //     )),
 
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DOListScreen())),
-                    ),
+                        onPressed: () {
+                          NetworkConnectivity.check().then((internet) async {
+                            // clear past user
+
+                            if (internet) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DOListScreen()));
+                            } else {
+                              //show network erro
+                              showMessageError("Network is not avalable !!!");
+                            }
+                          });
+                        }),
                   ],
                 ),
               ),
@@ -778,7 +918,6 @@ class _DashboardBodyState extends State<DashboardBody> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 50.0, horizontal: 30),
                 child: Column(
-                  
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     // piChartDisplay
@@ -786,11 +925,11 @@ class _DashboardBodyState extends State<DashboardBody> {
                       "${4765756}",
                       style: TextStyle(color: Colors.black45, fontSize: 10),
                     ),
-                     Text(
+                    Text(
                       "sale",
                       style: TextStyle(color: Colors.black45, fontSize: 14),
                     ),
-                    SizedBox(height:25),
+                    SizedBox(height: 25),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 5.0, horizontal: 0),
@@ -813,61 +952,63 @@ class _DashboardBodyState extends State<DashboardBody> {
     );
   }
 
-   
-showAlertDialog(BuildContext context) {
-
-  // set up the buttons
-  Widget cancelButton = FlatButton(
-    child: Text("Cancel",style: TextStyle(color:Colors.black87),),
-    onPressed:  () {
-
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text(
+        "Cancel",
+        style: TextStyle(color: Colors.black87),
+      ),
+      onPressed: () {
         Navigator.pop(context);
-
-    },
-  );
-  Widget continueButton = FlatButton(
-    child: Text("Continue",style: TextStyle(color:Colors.black87),),
-    onPressed:  () {
-
-      LoginPrefrences loginPrefrences = LoginPrefrences();
-              loginPrefrences.setUser(false);
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text(
+        "Logout",
+        style: TextStyle(color: Colors.black87),
+      ),
+      onPressed: () {
+        LoginPrefrences loginPrefrences = LoginPrefrences();
+        loginPrefrences.setUser(false);
 
         Navigator.pushAndRemoveUntil(
-      context,
-      PageRouteBuilder(pageBuilder: (BuildContext context, Animation animation,
-          Animation secondaryAnimation) {
-        return LoginScreen();
-      }, transitionsBuilder: (BuildContext context, Animation<double> animation,
-          Animation<double> secondaryAnimation, Widget child) {
-        return new SlideTransition(
-          position: new Tween<Offset>(
-            begin: const Offset(1.0, 0.0),
-            end: Offset.zero,
-          ).animate(animation),
-          child: child,
-        );
-      }),
-      (Route route) => false);
+            context,
+            PageRouteBuilder(pageBuilder: (BuildContext context,
+                Animation animation, Animation secondaryAnimation) {
+              return LoginScreen();
+            }, transitionsBuilder: (BuildContext context,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              return new SlideTransition(
+                position: new Tween<Offset>(
+                  begin: const Offset(0.0, 2.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            }),
+            (Route route) => false);
+      },
+    );
 
-    },
-  );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Logout !"),
+      content: Text("You will be returned to login screen."),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Logout !"),
-    content: Text("Do you want to Logout?"),
-    actions: [
-      cancelButton,
-      continueButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }

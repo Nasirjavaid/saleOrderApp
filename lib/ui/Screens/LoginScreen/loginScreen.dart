@@ -1,7 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
+
+import 'package:sale_order_app/CommonWidegets/commonWidgets..dart';
+import 'package:sale_order_app/Models/loginScreenlogoAndCompanyName.dart';
+import 'package:sale_order_app/Services/loginScreenLogoAndCompanyNameService.dart';
+
+import 'package:sale_order_app/Models/user.dart';
+import 'package:sale_order_app/Network/apiResponce.dart';
+import 'package:sale_order_app/Services/userServise.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/darkThemePrefrences.dart';
+import 'package:sale_order_app/config/methods.dart';
 import 'package:sale_order_app/ui/Screens/HomeScreen/dashBoard.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,31 +22,178 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginScreen> {
+  //Calling logo and company name service
+  LoginScreenLogoAndCompanyNameService
+      get loginScreenLogoAndCompanyNameService =>
+          GetIt.I<LoginScreenLogoAndCompanyNameService>();
+  bool isLoadingForLogoAndName = false;
+//Api responce for logo and company name
+  APIResponce<LoginScreenLogoAndComapnyName>
+      apiResponceLoginScreenLogoAndCompanyName;
+
+  //Getting user service to get User Auth
+  UserService get userService => GetIt.I<UserService>();
+  //Api responce call for user Auth
+  APIResponce<User> apiResponce;
+  bool isLoading = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  LoginScreenLogoAndCompanyNameService logiService = new  LoginScreenLogoAndCompanyNameService();
   @override
   void initState() {
     // TODO: implement initState
     SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+    getLoginScreenLogoAndCompanyName();
+
     super.initState();
   }
 
-  final _formKey = GlobalKey<FormState>();
-  final snackBar = SnackBar(content: Text('Data processing '));
-  @override
-  Widget build(BuildContext context) {
-    final logo = Column(children: <Widget>[
-      Hero(
-        tag: 'hero',
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 30.0,
-          child: Image.asset('images/logo.png'),
+  getLoginScreenLogoAndCompanyName() async {
+    setState(() {
+      isLoadingForLogoAndName = true;
+    });
+
+  
+    apiResponceLoginScreenLogoAndCompanyName =
+        await logiService
+            .getLoginScreenLogoAndCompanyName();
+
+
+    if (apiResponceLoginScreenLogoAndCompanyName.data.companyLogo == null) {
+      print("Logo api called");
+      if (mounted) {
+        setState(() {
+          isLoadingForLogoAndName = false;
+        });
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        isLoadingForLogoAndName = false;
+      });
+    }
+   
+  }
+
+
+
+  Future<bool> fetchUserAuth() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    apiResponce = await userService.getUserAuth();
+
+    if (apiResponce.error) {
+      showMessageError("Something went wrong !");
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      return false;
+    }
+
+    if (apiResponce.data.response) {
+      // showMessageError("Wrong user name or password !");
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      return true;
+    }
+    print("${apiResponce.data.authenticatoin}");
+    print("${apiResponce.data.response}");
+
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+    return false;
+  }
+
+  void showMessageSuccess(String message, [MaterialColor color = Colors.blue]) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      backgroundColor: color,
+      content: new Text(
+        message,
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+  void showMessageError(String message, [MaterialColor color = Colors.red]) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      backgroundColor: color,
+      content: new Text(
+        message,
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+  Widget logoAndName() {
+    return Builder(
+      builder: (BuildContext context) {
+        if (isLoadingForLogoAndName) {
+          return CommonWidgets.progressIndicator;
+        }
+
+        if (apiResponceLoginScreenLogoAndCompanyName == null) {
+          return commonlogoAndNameWidget();
+        }
+
+        return dynaminlogoAndNameWidget();
+      },
+    );
+  }
+
+  Widget dynaminlogoAndNameWidget() {
+    return Column(children: <Widget>[
+    
+         Container(
+              height: 50,
+             
+
+              child: CachedNetworkImage(
+                  imageUrl: apiResponceLoginScreenLogoAndCompanyName
+                      .data.companyLogo)),
           // child: Icon(
           //   Icons.person_pin,
           //   color: Colors.white70,
           //   size: 90.0,
           // ),
-        ),
-      ),
+        
+      
+      Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: Text(
+            "${apiResponceLoginScreenLogoAndCompanyName.data.companyName}",
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 40,
+                fontWeight: FontWeight.w300)),
+      )
+    ]);
+  }
+
+  Widget commonlogoAndNameWidget() {
+    return Column(children: <Widget>[
+     Container(
+              height: 50,
+              child: CachedNetworkImage(
+                  imageUrl:
+                      "https://www.visionplus.com.pk/assets/base/img/layout/logos/logo-02.png")),
+       
       Padding(
         padding: const EdgeInsets.all(25.0),
         child: Text("Vision Plus",
@@ -45,6 +203,34 @@ class _LoginPageState extends State<LoginScreen> {
                 fontWeight: FontWeight.w300)),
       )
     ]);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // final logo =  Column(children: <Widget>[
+    //   Hero(
+    //     tag: 'hero',
+    //     child: CircleAvatar(
+    //       backgroundColor: Colors.transparent,
+    //       radius: 30.0,
+    //       child:Container(height: 40,
+    //       child:CachedNetworkImage(imageUrl: "https://www.visionplus.com.pk/assets/base/img/layout/logos/logo-02.png")),
+    //       // child: Icon(
+    //       //   Icons.person_pin,
+    //       //   color: Colors.white70,
+    //       //   size: 90.0,
+    //       // ),
+    //     ),
+    //   ),
+    //   Padding(
+    //     padding: const EdgeInsets.all(25.0),
+    //     child: Text("Vision Plus",
+    //         style: TextStyle(
+    //             color: Colors.white,
+    //             fontSize: 40,
+    //             fontWeight: FontWeight.w300)),
+    //   )
+    // ]);
 
     final email = TextFormField(
       keyboardType: TextInputType.emailAddress,
@@ -177,32 +363,42 @@ class _LoginPageState extends State<LoginScreen> {
         ),
         onPressed: () {
           if (_formKey.currentState.validate()) {
+            // netWorkChek();
+            LoginPrefrences loginPrefrences = LoginPrefrences();
 
+            NetworkConnectivity.check().then((internet) async {
+              if (internet) {
+                bool userUth = await fetchUserAuth();
 
+                if (userUth) {
+                  loginPrefrences.setUser(true);
 
-              LoginPrefrences loginPrefrences = LoginPrefrences();
-              loginPrefrences.setUser(true);
-
-            //   // If the form is valid, display a Snackbar.
-            //  Scaffold.of(context).showSnackBar(snackBar);
-            Navigator.pushAndRemoveUntil(
-                context,
-                PageRouteBuilder(pageBuilder: (BuildContext context,
-                    Animation animation, Animation secondaryAnimation) {
-                  return Dashboard();
-                }, transitionsBuilder: (BuildContext context,
-                    Animation<double> animation,
-                    Animation<double> secondaryAnimation,
-                    Widget child) {
-                  return new SlideTransition(
-                    position: new Tween<Offset>(
-                      begin: const Offset(1.0, 0.0),
-                      end: Offset.zero,
-                    ).animate(animation),
-                    child: child,
-                  );
-                }),
-                (Route route) => false);
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      PageRouteBuilder(pageBuilder: (BuildContext context,
+                          Animation animation, Animation secondaryAnimation) {
+                        return Dashboard();
+                      }, transitionsBuilder: (BuildContext context,
+                          Animation<double> animation,
+                          Animation<double> secondaryAnimation,
+                          Widget child) {
+                        return new SlideTransition(
+                          position: new Tween<Offset>(
+                            begin: const Offset(1.0, 0.0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      }),
+                      (Route route) => false);
+                } else {
+                  showMessageError(" wring User Name or Password");
+                }
+              } else {
+                //show network erro
+                showMessageError("Network is not avalable");
+              }
+            });
           }
         },
         padding: EdgeInsets.all(12),
@@ -210,6 +406,27 @@ class _LoginPageState extends State<LoginScreen> {
         child: Text('Log In', style: TextStyle(color: Colors.white)),
       ),
     );
+
+    final progressIndicator = Padding(
+        padding: EdgeInsets.symmetric(vertical: 25.0, horizontal: 90),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Center(
+              child: Container(
+                height: 20,
+                width: 20,
+                margin: EdgeInsets.all(5),
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.0,
+                  valueColor:
+                      AlwaysStoppedAnimation(AppTheme.appBackgroundColor),
+                ),
+              ),
+            ),
+          ],
+        ));
 
     // final backtext = FlatButton(
     //   child: Text(
@@ -229,6 +446,7 @@ class _LoginPageState extends State<LoginScreen> {
             tileMode: TileMode.clamp),
       ),
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.transparent,
         body: Form(
           key: _formKey,
@@ -241,7 +459,7 @@ class _LoginPageState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                logo,
+                logoAndName(),
                 Card(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
@@ -259,7 +477,10 @@ class _LoginPageState extends State<LoginScreen> {
                       SizedBox(height: 8.0),
                       password,
                       //SizedBox(height: 14.0),
-                      loginButton,
+                      // loginButton,
+
+                      Container(
+                          child: isLoading ? progressIndicator : loginButton)
                       //backtext
                     ],
                   ),

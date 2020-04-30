@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:sale_order_app/Models/saleOrder.dart';
+import 'package:sale_order_app/Models/deliveryOrder.dart';
 import 'package:sale_order_app/config/constents.dart';
 
-class SaleOrderDetailScreenListCard extends StatelessWidget {
+class DeliveryOrderDetailScreenListCard extends StatelessWidget {
   Items items;
-  SaleOrderDetailScreenListCard({
+  DeliveryOrderDetailScreenListCard({
     Key key,
     this.items,
   }) : super(key: key);
@@ -24,7 +24,7 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
       ),
       child: InkWell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 1.0,left: 3,right: 3),
+            padding: const EdgeInsets.only(top: 1.0, left: 3, right: 3),
             child: Card(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -43,7 +43,7 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                               //   child: Icon(Icons.widgets,size: 20,color: AppTheme.appBackgroundColorforCard3,),
                               // ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(6.0),
                                 child: items.itemName == null
                                     ? Text("N/A",
                                         style: TextStyle(
@@ -72,19 +72,25 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                             //         topRight: Radius.circular(2))),
                             height: MediaQuery.of(context).size.height,
 
-                            child: Center(
-                              child: items.saleAmount == null
-                                  ? Text("N/A",
-                                      style: TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 11))
-                                  : Text(
-                                      "${Constents.numbaerFormate.format(items.saleAmount)}",
-                                      style: TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 11)),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right:6.0),
+                                child: Container(
+                                  child: items.saleAmount == null
+                                      ? Text("N/A",
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))
+                                      : Text(
+                                          "${Constents.numbaerFormate.format(items.saleAmount)}",
+                                          style: TextStyle(
+                                              color: Colors.black87,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11)),
+                                ),
+                              ),
                             ),
                           ),
                           flex: 1,

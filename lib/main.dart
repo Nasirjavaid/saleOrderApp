@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
+import 'package:sale_order_app/Services/LoginScreenlogoAndCompanyNameService.dart';
+import 'package:sale_order_app/Services/deliveryOrderService.dart';
+import 'package:sale_order_app/Services/saleOrderService.dart';
+import 'package:sale_order_app/Services/summaryService.dart';
+import 'package:sale_order_app/Services/userServise.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:sale_order_app/ui/Screens/HomeScreen/dashBoard.dart';
-
 import 'package:sale_order_app/ui/Screens/LoginScreen/loginScreen.dart';
-
 import 'config/appState.dart';
 
+
+void setUpLocator()
+{
+    GetIt.I.registerLazySingleton(() =>UserService());
+    GetIt.I.registerLazySingleton(() =>SummaryService());
+    GetIt.I.registerLazySingleton(() =>SOService());
+    GetIt.I.registerLazySingleton(() =>DOService());
+    GetIt.I.registerLazySingleton(() =>LoginScreenLogoAndCompanyNameService());
+}
+
 void main() async {
+
+
   // add this, and it should be the first line in main method
   WidgetsFlutterBinding.ensureInitialized();
-
+//Set up locator function
+  setUpLocator();
   // Set default home.
   Widget _defaultHome = new LoginScreen();
   LoginPrefrences loginPrefrences = LoginPrefrences();
