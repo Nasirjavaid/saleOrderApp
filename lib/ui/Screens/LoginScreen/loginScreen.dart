@@ -102,8 +102,8 @@ class _LoginPageState extends State<LoginScreen> {
       }
       return true;
     }
-    print("${apiResponce.data.authenticatoin}");
-    print("${apiResponce.data.response}");
+    // print("${apiResponce.data.authenticatoin}");
+    // print("${apiResponce.data.response}");
 
     if (mounted) {
       setState(() {
@@ -152,22 +152,25 @@ class _LoginPageState extends State<LoginScreen> {
   }
 
   Widget dynaminlogoAndNameWidget() {
-    return Column(children: <Widget>[
-      Container(
-          height: 50,
-          child: CachedNetworkImage(
-              imageUrl:
-                  apiResponceLoginScreenLogoAndCompanyName.data.companyLogo)),
-      Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Text(
-            "${apiResponceLoginScreenLogoAndCompanyName.data.companyName}",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.w300)),
-      )
-    ]);
+    return Padding(
+      padding: const EdgeInsets.only(bottom:25.0),
+      child: Column(children: <Widget>[
+        Container(
+            height: 100,
+            child: CachedNetworkImage(
+                imageUrl:
+                    apiResponceLoginScreenLogoAndCompanyName.data.companyLogo)),
+        // Padding(
+        //   padding: const EdgeInsets.all(25.0),
+        //   child: Text(
+        //       "${apiResponceLoginScreenLogoAndCompanyName.data.companyName}",
+        //       style: TextStyle(
+        //           color: Colors.white,
+        //           fontSize: 40,
+        //           fontWeight: FontWeight.w300)),
+        // )
+      ]),
+    );
   }
 
   Widget commonlogoAndNameWidget() {
@@ -424,7 +427,7 @@ class _LoginPageState extends State<LoginScreen> {
             height: MediaQuery.of(context).size.height+100,
         decoration: BoxDecoration(
           gradient: new LinearGradient(
-              colors: [Color(0xFF2193b0), Color(0xFF3a7bd5)],
+              colors: [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
               begin: Alignment(1.0, 0.0),
               end: Alignment(0.0, 1.0),
               stops: [0.0, 1.0],
@@ -450,7 +453,7 @@ class _LoginPageState extends State<LoginScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
-                    elevation: 5,
+                    elevation: 3,
                     child: ListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 10),
@@ -492,7 +495,7 @@ class _LoginPageState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
                Align(
-                 alignment: Alignment.centerLeft,
+                 alignment:Alignment.centerLeft,
                               child: Text(
                   "Developed by.",
                   style: AppTypographyStyles.titleTextStyle,

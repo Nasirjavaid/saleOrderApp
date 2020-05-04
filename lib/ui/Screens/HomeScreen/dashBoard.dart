@@ -72,32 +72,6 @@ class _DashboardBodyState extends State<DashboardBody> {
   static var chartDisplay, piChartDisplay;
   var data;
 
-  final List<List<addCahrts>> charts = [
-    [
-      addCahrts("as", 34),
-      addCahrts("as", 34),
-      addCahrts("as", 64),
-      addCahrts("as", 74),
-      addCahrts("as", 94),
-      addCahrts("as", 8),
-      addCahrts("as", 34),
-    ],
-    [
-      addCahrts("new", 34),
-      addCahrts("new", 34),
-      addCahrts("new", 34),
-    ],
-    [
-      addCahrts("old", 55),
-      addCahrts("old", 55),
-      addCahrts("old", 55),
-      addCahrts("old", 55),
-      addCahrts("old", 55),
-      addCahrts("old", 55),
-      addCahrts("old", 55),
-    ]
-  ];
-
   @override
   void initState() {
     // TODO: implement initState
