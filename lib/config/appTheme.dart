@@ -1,5 +1,17 @@
 import 'package:flutter/material.dart';
 
+
+
+
+
+
+
+  class AppTypoGraphy {
+
+    static TextStyle errorHintStyle = TextStyle(color: Colors.white70);
+  }
+
+
 class AppTheme {
 
 
@@ -9,6 +21,7 @@ static Color appBackgroundColorforCard1 =Color(0xFF4C98CF);
 static Color appBackgroundColorforCard2 =Color(0xFF4873A6);
 static Color appBackgroundColorforCard3 =Color(0xFF5A5387);
 static Color appBackgroundColorforCard4 =Color(0xFF524365);
+static Color appBackgroundColorforloginCard =Colors.blue[300];
 
 
 static Color appBackgroundColorforCard5 =Color(0xFF2193b0);
@@ -31,6 +44,8 @@ static Color appBackgroundColorForButtons =Color(0xFF3A4F73);
   static const Color _darkPrimaryVariantColor = Colors.black;
   static const Color _darkSecondaryColor = Colors.white;
   static const Color _darkOnPrimaryColor = Colors.white;
+
+
 
   static final ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: _lightPrimaryVariantColor,

@@ -156,19 +156,12 @@ class _LoginPageState extends State<LoginScreen> {
       padding: const EdgeInsets.only(bottom:25.0),
       child: Column(children: <Widget>[
         Container(
-            height: 100,
+            height: 120,
+            width: 180,
             child: CachedNetworkImage(
                 imageUrl:
                     apiResponceLoginScreenLogoAndCompanyName.data.companyLogo)),
-        // Padding(
-        //   padding: const EdgeInsets.all(25.0),
-        //   child: Text(
-        //       "${apiResponceLoginScreenLogoAndCompanyName.data.companyName}",
-        //       style: TextStyle(
-        //           color: Colors.white,
-        //           fontSize: 40,
-        //           fontWeight: FontWeight.w300)),
-        // )
+       
       ]),
     );
   }
@@ -176,7 +169,7 @@ class _LoginPageState extends State<LoginScreen> {
   Widget commonlogoAndNameWidget() {
     return Column(children: <Widget>[
       Container(
-          height: 50,
+          height: 100,
           child: CachedNetworkImage(
               imageUrl:
                   "https://www.visionplus.com.pk/assets/base/img/layout/logos/logo-02.png")),
@@ -193,31 +186,7 @@ class _LoginPageState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final logo =  Column(children: <Widget>[
-    //   Hero(
-    //     tag: 'hero',
-    //     child: CircleAvatar(
-    //       backgroundColor: Colors.transparent,
-    //       radius: 30.0,
-    //       child:Container(height: 40,
-    //       child:CachedNetworkImage(imageUrl: "https://www.visionplus.com.pk/assets/base/img/layout/logos/logo-02.png")),
-    //       // child: Icon(
-    //       //   Icons.person_pin,
-    //       //   color: Colors.white70,
-    //       //   size: 90.0,
-    //       // ),
-    //     ),
-    //   ),
-    //   Padding(
-    //     padding: const EdgeInsets.all(25.0),
-    //     child: Text("Vision Plus",
-    //         style: TextStyle(
-    //             color: Colors.white,
-    //             fontSize: 40,
-    //             fontWeight: FontWeight.w300)),
-    //   )
-    // ]);
-
+  
     final email = TextFormField(
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.words,
@@ -262,11 +231,11 @@ class _LoginPageState extends State<LoginScreen> {
                   //fontFamily: ScreensFontFamlty.FONT_FAMILTY
                   ),
           filled: true,
-          fillColor: Color(0xFFe4f4f7),
-          errorStyle: TextStyle(color: Color(0xFF72868a))),
+          fillColor:Colors.white,
+          errorStyle: AppTypoGraphy.errorHintStyle),
       validator: (String email) {
         if (email.isEmpty) {
-          return "Please enter email";
+          return "email";
         } else {
           return null;
         }
@@ -319,11 +288,11 @@ class _LoginPageState extends State<LoginScreen> {
                   //fontFamily: ScreensFontFamlty.FONT_FAMILTY
                   ),
           filled: true,
-          fillColor: Color(0xFFe4f4f7),
-          errorStyle: TextStyle(color: Color(0xFF72868a))),
+        fillColor:Colors.white,
+          errorStyle: AppTypoGraphy.errorHintStyle),
       validator: (String password) {
         if (password.isEmpty) {
-          return "Please enter password";
+          return "password";
         } else {
           return null;
         }
@@ -344,6 +313,8 @@ class _LoginPageState extends State<LoginScreen> {
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
       child: RaisedButton(
+        
+        colorBrightness:Brightness.light,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
@@ -378,7 +349,7 @@ class _LoginPageState extends State<LoginScreen> {
                       }),
                       (Route route) => false);
                 } else {
-                  showMessageError(" wring User Name or Password");
+                  showMessageError(" wrong User Name or Password");
                 }
               } else {
                 //show network erro
@@ -388,8 +359,8 @@ class _LoginPageState extends State<LoginScreen> {
           }
         },
         padding: EdgeInsets.all(12),
-        color: AppTheme.appBackgroundColor,
-        child: Text('Log In', style: TextStyle(color: Colors.white)),
+        color:Colors.white,
+        child: Text('Log In', style: TextStyle(color: Colors.blue[400])),
       ),
     );
 
@@ -407,7 +378,7 @@ class _LoginPageState extends State<LoginScreen> {
                 child: CircularProgressIndicator(
                   strokeWidth: 2.0,
                   valueColor:
-                      AlwaysStoppedAnimation(AppTheme.appBackgroundColor),
+                      AlwaysStoppedAnimation(Colors.white),
                 ),
               ),
             ),
@@ -450,6 +421,7 @@ class _LoginPageState extends State<LoginScreen> {
                   //Logo and company namw widget
                   logoAndName(),
                   Card(
+                    color: AppTheme.appBackgroundColorforloginCard,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0),
                     ),
