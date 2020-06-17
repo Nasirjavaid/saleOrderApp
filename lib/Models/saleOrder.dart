@@ -1,7 +1,7 @@
 class SaleOrder {
-   int id;
-  String name;
+  int saleOrderId;
   int sO;
+  String name;
   String date;
   int balance;
   int balance_;
@@ -10,9 +10,9 @@ class SaleOrder {
   List<Items> items;
 
   SaleOrder(
-      {this.id,
-        this.name,
+      {this.saleOrderId,
       this.sO,
+      this.name,
       this.date,
       this.balance,
       this.balance_,
@@ -21,12 +21,12 @@ class SaleOrder {
       this.items});
 
   SaleOrder.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    saleOrderId = json['sale_order_id'];
+    sO = json['SO'];
     name = json['Name'];
-    sO = json['SO#'];
     date = json['Date'];
     balance = json['Balance'];
-    balance_ = json['Balance_'];
+    balance = json['Balance_'];
     limit = json['Limit'];
     thisSO = json['This_SO'];
     if (json['Items'] != null) {
@@ -39,12 +39,12 @@ class SaleOrder {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    data['sale_order_id'] = this.saleOrderId;
+    data['SO'] = this.sO;
     data['Name'] = this.name;
-    data['SO#'] = this.sO;
     data['Date'] = this.date;
     data['Balance'] = this.balance;
-    data['Balance_'] = this.balance_;
+    data['Balance_'] = this.balance;
     data['Limit'] = this.limit;
     data['This_SO'] = this.thisSO;
     if (this.items != null) {
@@ -55,23 +55,26 @@ class SaleOrder {
 }
 
 class Items {
-   int id;
+  int id;
+  double saleAmount;
   String itemName;
-  int saleAmount;
-  
-  Items({this.id,this.itemName, this.saleAmount});
+  String iTEMCODE;
+
+  Items({this.id, this.saleAmount, this.itemName, this.iTEMCODE});
 
   Items.fromJson(Map<String, dynamic> json) {
-     id = json['id'];
-    itemName = json['Item_Name'];
+    id = json['id'];
     saleAmount = json['Sale_Amount'];
+    itemName = json['Item_Name'];
+    iTEMCODE = json['ITEM_CODE'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] =this.id;
-    data['Item_Name'] = this.itemName;
+    data['id'] = this.id;
     data['Sale_Amount'] = this.saleAmount;
+    data['Item_Name'] = this.itemName;
+    data['ITEM_CODE'] = this.iTEMCODE;
     return data;
   }
 }

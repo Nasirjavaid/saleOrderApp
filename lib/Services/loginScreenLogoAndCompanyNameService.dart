@@ -7,27 +7,38 @@ import 'package:http/http.dart' as http;
 class LoginScreenLogoAndCompanyNameService {
   Future<APIResponce<LoginScreenLogoAndComapnyName>>
       getLoginScreenLogoAndCompanyName() async {
-    return http.get(APIConstants.loginScreenLogoAndCompantNameApi).then((data) {
-      if (data.statusCode == 200) {
-        final jsonDataasMap = json.decode(data.body);
+   final data = await  http.get(APIConstants.loginScreenLogoAndCompantNameApi);
 
-        print(
-            "responce body in  loginScreenLogoAndComapnyName : ${jsonDataasMap}");
+        
+          if (data.statusCode == 200) {
+            final jsonDataasMap = json.decode(data.body);
+            LoginScreenLogoAndComapnyName loginScreenLogoAndComapnyName;
+            for (var item in jsonDataasMap) {
+              print(
+                  "responce body in  loginScreenLogoAndComapnyName : ${item}");
 
-        LoginScreenLogoAndComapnyName loginScreenLogoAndComapnyName =
-            LoginScreenLogoAndComapnyName.fromJson(jsonDataasMap);
+              loginScreenLogoAndComapnyName =
+                  LoginScreenLogoAndComapnyName.fromJson(item);
 
-        return APIResponce<LoginScreenLogoAndComapnyName>(
-            data: loginScreenLogoAndComapnyName);
-      }
+              print(
+                  "responce body in  loginScreenLogoAndComapnyName : ${loginScreenLogoAndComapnyName.companyName}");
+            }
 
-      return APIResponce<LoginScreenLogoAndComapnyName>(
-          error: true,
-          errorMessage: "An error occured in SO service class !!!!!");
-    }).catchError((Object exception) =>
-        APIResponce<LoginScreenLogoAndComapnyName>(
-            error: true,
-            errorMessage:
-                "An error occured in sale order services class :: $exception"));
+            return APIResponce<LoginScreenLogoAndComapnyName>(
+                data: loginScreenLogoAndComapnyName);
+          }
+
+          return APIResponce<LoginScreenLogoAndComapnyName>(
+              error: true,
+              errorMessage: "An error occured in SO service class !!!!!");
+        // })
+        // .catchError((Object exception) => APIResponce<
+        //         LoginScreenLogoAndComapnyName>(
+        //     error: true,
+        //     errorMessage:
+        //         "An error occured in sale order services class :: $exception"))
+        // .timeout(Duration(seconds: 6))
+        // .then((value) => APIResponce<LoginScreenLogoAndComapnyName>(
+        //     error: true, errorMessage: "An Time error"));
   }
 }

@@ -776,7 +776,7 @@ class _DashboardBodyState extends State<DashboardBody> {
             ),
 
             SizedBox(
-              height: 30,
+              height: 0,
             ),
             Align(
               alignment: Alignment.topLeft,
@@ -788,7 +788,6 @@ class _DashboardBodyState extends State<DashboardBody> {
             ),
 
             //    Container(
-
             //         color: Theme.of(context).colorScheme.primary,
             //         child: Padding(
             //             padding: const EdgeInsets.all(24.0),

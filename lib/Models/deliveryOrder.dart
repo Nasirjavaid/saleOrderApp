@@ -21,9 +21,9 @@ class DeliveryOrder {
       this.items});
 
   DeliveryOrder.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['Id'];
     name = json['Name'];
-    dO = json['DO#'];
+    dO = json['DO'];
     date = json['Date'];
     balance = json['Balance'];
     balance_ = json['Balance_'];
@@ -39,9 +39,9 @@ class DeliveryOrder {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
+    data['Id'] = this.id;
     data['Name'] = this.name;
-    data['DO#'] = this.dO;
+    data['DO'] = this.dO;
     data['Date'] = this.date;
     data['Balance'] = this.balance;
     data['Balance_'] = this.balance_;
@@ -57,7 +57,7 @@ class DeliveryOrder {
 class Items {
   int id;
   String itemName;
-  int saleAmount;
+  double saleAmount;
 
   Items({this.id,this.itemName, this.saleAmount});
 

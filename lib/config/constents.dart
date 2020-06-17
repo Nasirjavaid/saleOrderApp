@@ -1,9 +1,6 @@
 import 'package:intl/intl.dart';
-
-
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
 
 class Constents{
 
@@ -49,11 +46,12 @@ class AppColorsStyles {
 }
 
 class APIConstants {
-static String userAuthApi ="http://95.168.178.226/SOAPP/login.json"; 
+static String baseUrl ="http://192.168.88.100:8080";
+ static String userAuthApi =baseUrl+"/api/login?"; 
  static String dashboardSummaryApi ="http://95.168.178.226/SOAPP/summary.json"; 
- static String deliveryOrderyApi ="http://95.168.178.226/SOAPP/deliveryorder.json"; 
- static String saleOrderyApi ="http://95.168.178.226/SOAPP/saleorder.json"; 
- static String loginScreenLogoAndCompantNameApi ="http://95.168.178.226/SOAPP/MainScreen.json"; 
+ static String deliveryOrderyApi =baseUrl+"/api/deliveryorder"; 
+ static String saleOrderyApi =baseUrl+"/api/saleOrder"; 
+ static String loginScreenLogoAndCompantNameApi =baseUrl+"/api/MainScreen?companyId=1"; 
 
 
 }
@@ -65,10 +63,8 @@ class AppColours {
 
 enum ViewState { Idle, Busy, Retrieved, Error }
 
-
-
 class DateTimeConverter {
- static String getDateAndTime(String rawDateAndTime) {
+  String getDateAndTime(String rawDateAndTime) {
     var rawDate = DateTime.tryParse(rawDateAndTime);
     var formatter = new DateFormat.yMd().add_jm();
     String formatted = formatter.format(rawDate);

@@ -1,4 +1,5 @@
 import 'package:connectivity/connectivity.dart';
+import 'package:intl/intl.dart';
 
 class NetworkConnectivity {
   static const String NETWORK_NOT_AVAILABLE =
@@ -14,3 +15,14 @@ class NetworkConnectivity {
     return false;
   }
 }
+
+
+class DateTimeConverter {
+  String getDateAndTime(String rawDateAndTime) {
+    var rawDate = DateTime.tryParse(rawDateAndTime);
+     var formatter = DateFormat.yMMMMd('en_US');
+  String formatted = formatter.format(rawDate);
+    print("Date  in date formate: $formatted");
+   
+    return formatted;
+  }}

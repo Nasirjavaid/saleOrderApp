@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,6 +42,9 @@ class _LoginPageState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   LoginScreenLogoAndCompanyNameService logiService =
       new LoginScreenLogoAndCompanyNameService();
+
+  TextEditingController etUserNameController = TextEditingController();
+  TextEditingController etPasswordController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -57,8 +62,10 @@ class _LoginPageState extends State<LoginScreen> {
 
     apiResponceLoginScreenLogoAndCompanyName =
         await logiService.getLoginScreenLogoAndCompanyName();
+    print(
+        "in  login ++++++++++++  ${apiResponceLoginScreenLogoAndCompanyName.data.companyName}");
 
-    if (apiResponceLoginScreenLogoAndCompanyName.data.companyLogo == null) {
+    if (apiResponceLoginScreenLogoAndCompanyName.data == null) {
       print("Logo api called");
       if (mounted) {
         setState(() {
@@ -74,25 +81,24 @@ class _LoginPageState extends State<LoginScreen> {
     }
   }
 
-  Future<bool> fetchUserAuth() async {
+  Future<bool> fetchUserAuth(String userName, String password) async {
     setState(() {
       isLoading = true;
     });
 
-    apiResponce = await userService.getUserAuth();
+    apiResponce = await userService.getUserAuth(userName, password);
 
-    if (apiResponce.error) {
+    if (apiResponce == null) {
       showMessageError("Something went wrong !");
 
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+      setState(() {
+        isLoading = false;
+      });
+
       return false;
     }
 
-    if (apiResponce.data.response) {
+    if (apiResponce.data.response == true) {
       // showMessageError("Wrong user name or password !");
 
       if (mounted) {
@@ -100,6 +106,7 @@ class _LoginPageState extends State<LoginScreen> {
           isLoading = false;
         });
       }
+
       return true;
     }
     // print("${apiResponce.data.authenticatoin}");
@@ -153,15 +160,23 @@ class _LoginPageState extends State<LoginScreen> {
 
   Widget dynaminlogoAndNameWidget() {
     return Padding(
-      padding: const EdgeInsets.only(bottom:25.0),
+      padding: const EdgeInsets.only(bottom: 25.0),
       child: Column(children: <Widget>[
         Container(
             height: 120,
             width: 180,
-            child: CachedNetworkImage(
-                imageUrl:
-                    apiResponceLoginScreenLogoAndCompanyName.data.companyLogo)),
-       
+            child: Image.memory(base64Decode(
+                apiResponceLoginScreenLogoAndCompanyName.data.companyLogo))
+
+            //  CachedNetworkImage(
+            //     imageUrl:
+            //         apiResponceLoginScreenLogoAndCompanyName.data.companyLogo)
+
+            ),
+        Text(
+          "${apiResponceLoginScreenLogoAndCompanyName.data.companyName}",
+          style: Theme.of(context).textTheme.title.copyWith(color:Colors.black87),
+        )
       ]),
     );
   }
@@ -173,21 +188,21 @@ class _LoginPageState extends State<LoginScreen> {
           child: CachedNetworkImage(
               imageUrl:
                   "https://www.visionplus.com.pk/assets/base/img/layout/logos/logo-02.png")),
-      Padding(
-        padding: const EdgeInsets.all(25.0),
-        child: Text("Vision Plus",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 40,
-                fontWeight: FontWeight.w300)),
-      )
+      // Padding(
+      //   padding: const EdgeInsets.all(25.0),
+      //   child: Text("Vision Plus",
+      //       style: TextStyle(
+      //           color: Colors.white,
+      //           fontSize: 40,
+      //           fontWeight: FontWeight.w300)),
+      //)
     ]);
   }
 
   @override
   Widget build(BuildContext context) {
-  
     final email = TextFormField(
+      controller: etUserNameController,
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.words,
       autocorrect: false,
@@ -225,17 +240,17 @@ class _LoginPageState extends State<LoginScreen> {
                   color: Colors.white,
                   width: 2.0),
               borderRadius: BorderRadius.all(Radius.circular(25))),
-          hintText: "Email",
+          hintText: "User Name",
           hintStyle:
               TextStyle(color: Color(0xFF72868a), fontWeight: FontWeight.w500
                   //fontFamily: ScreensFontFamlty.FONT_FAMILTY
                   ),
           filled: true,
-          fillColor:Colors.white,
+          fillColor: Colors.white,
           errorStyle: AppTypoGraphy.errorHintStyle),
       validator: (String email) {
         if (email.isEmpty) {
-          return "email";
+          return "User Name";
         } else {
           return null;
         }
@@ -243,6 +258,7 @@ class _LoginPageState extends State<LoginScreen> {
     );
 
     final password = TextFormField(
+      controller: etPasswordController,
       obscureText: true,
       // cursorColor: Color.fromRGBO(64, 75, 96, .9),
       keyboardType: TextInputType.text,
@@ -288,7 +304,7 @@ class _LoginPageState extends State<LoginScreen> {
                   //fontFamily: ScreensFontFamlty.FONT_FAMILTY
                   ),
           filled: true,
-        fillColor:Colors.white,
+          fillColor: Colors.white,
           errorStyle: AppTypoGraphy.errorHintStyle),
       validator: (String password) {
         if (password.isEmpty) {
@@ -313,8 +329,7 @@ class _LoginPageState extends State<LoginScreen> {
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 50),
       child: RaisedButton(
-        
-        colorBrightness:Brightness.light,
+        colorBrightness: Brightness.light,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
@@ -325,32 +340,41 @@ class _LoginPageState extends State<LoginScreen> {
 
             NetworkConnectivity.check().then((internet) async {
               if (internet) {
-                bool userUth = await fetchUserAuth();
+                bool userUth = await fetchUserAuth(
+                    etUserNameController.text, etPasswordController.text);
 
-                if (userUth) {
-                  loginPrefrences.setUser(true);
+                setState(() {
+                  isLoading = true;
+                });
+                Future.delayed(const Duration(milliseconds: 1500), () {
+                  if (userUth) {
+                    loginPrefrences.setUser(true);
 
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      PageRouteBuilder(pageBuilder: (BuildContext context,
-                          Animation animation, Animation secondaryAnimation) {
-                        return Dashboard();
-                      }, transitionsBuilder: (BuildContext context,
-                          Animation<double> animation,
-                          Animation<double> secondaryAnimation,
-                          Widget child) {
-                        return new SlideTransition(
-                          position: new Tween<Offset>(
-                            begin: const Offset(1.0, 0.0),
-                            end: Offset.zero,
-                          ).animate(animation),
-                          child: child,
-                        );
-                      }),
-                      (Route route) => false);
-                } else {
-                  showMessageError(" wrong User Name or Password");
-                }
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        PageRouteBuilder(pageBuilder: (BuildContext context,
+                            Animation animation, Animation secondaryAnimation) {
+                          return Dashboard();
+                        }, transitionsBuilder: (BuildContext context,
+                            Animation<double> animation,
+                            Animation<double> secondaryAnimation,
+                            Widget child) {
+                          return new SlideTransition(
+                            position: new Tween<Offset>(
+                              begin: const Offset(1.0, 0.0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: child,
+                          );
+                        }),
+                        (Route route) => false);
+                  } else {
+                    showMessageError("Wrong user name or password");
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                });
               } else {
                 //show network erro
                 showMessageError("Network is not avalable");
@@ -359,7 +383,7 @@ class _LoginPageState extends State<LoginScreen> {
           }
         },
         padding: EdgeInsets.all(12),
-        color:Colors.white,
+        color: Colors.white,
         child: Text('Log In', style: TextStyle(color: Colors.blue[400])),
       ),
     );
@@ -377,8 +401,7 @@ class _LoginPageState extends State<LoginScreen> {
                 margin: EdgeInsets.all(5),
                 child: CircularProgressIndicator(
                   strokeWidth: 2.0,
-                  valueColor:
-                      AlwaysStoppedAnimation(Colors.white),
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
                 ),
               ),
             ),
@@ -393,97 +416,91 @@ class _LoginPageState extends State<LoginScreen> {
     //   onPressed: () {},
     // );
 
-    return
-           Container(
-            height: MediaQuery.of(context).size.height+100,
-        decoration: BoxDecoration(
-          gradient: new LinearGradient(
-              colors: [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
-              begin: Alignment(1.0, 0.0),
-              end: Alignment(0.0, 1.0),
-              stops: [0.0, 1.0],
-              tileMode: TileMode.clamp),
-        ),
-        child: Scaffold(
-          key: _scaffoldKey,
-          backgroundColor: Colors.transparent,
-          body: Form(
-            key: _formKey,
-            child: Padding(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  //Logo and company namw widget
-                  logoAndName(),
-                  Card(
-                    color: AppTheme.appBackgroundColorforloginCard,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    elevation: 3,
-                    child: ListView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 10),
-                      children: <Widget>[
-                        SizedBox(height: 15.0),
-
-                        //email widget
-                        email,
-                        SizedBox(height: 8.0),
-
-                        // password widget
-                        password,
-                        Container(
-                            child: isLoading ? progressIndicator : loginButton),
-                        
-                      ],
-                    ),
+    return Container(
+      height: MediaQuery.of(context).size.height + 100,
+      decoration: BoxDecoration(
+        gradient: new LinearGradient(
+            colors: [Color(0xFFFFFFFF), Color(0xFFFFFFFF)],
+            begin: Alignment(1.0, 0.0),
+            end: Alignment(0.0, 1.0),
+            stops: [0.0, 1.0],
+            tileMode: TileMode.clamp),
+      ),
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.transparent,
+        body: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              right: 20,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                //Logo and company namw widget
+                logoAndName(),
+                Card(
+                  color: AppTheme.appBackgroundColorforloginCard,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
-                
-                  // developerDetila()
-                ],
-              ),
+                  elevation: 3,
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 10),
+                    children: <Widget>[
+                      SizedBox(height: 15.0),
+
+                      //email widget
+                      email,
+                      SizedBox(height: 8.0),
+
+                      // password widget
+                      password,
+                      Container(
+                          child: isLoading ? progressIndicator : loginButton),
+                    ],
+                  ),
+                ),
+
+                // developerDetila()
+              ],
             ),
           ),
         ),
-      
+      ),
     );
   }
 
   Widget developerDetila() {
-    return 
-    
-       Container(
-            margin: EdgeInsets.only(top: 70),
-        child: SizedBox(
-          height: 50,
-          width: 140,
-                  child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-               Align(
-                 alignment:Alignment.centerLeft,
-                              child: Text(
-                  "Developed by.",
-                  style: AppTypographyStyles.titleTextStyle,
+    return Container(
+      margin: EdgeInsets.only(top: 70),
+      child: SizedBox(
+        height: 50,
+        width: 140,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Developed by.",
+                style: AppTypographyStyles.titleTextStyle,
               ),
-               ),
-              Align(
-                   alignment: Alignment.centerLeft,
-                              child: Text(
-                  "Vision Plus Solution Provider",
-                  style: AppTypographyStyles.headingTextStyle,
-                ),
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Vision Plus Solution Provider",
+                style: AppTypographyStyles.headingTextStyle,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-    
+      ),
     );
   }
 }

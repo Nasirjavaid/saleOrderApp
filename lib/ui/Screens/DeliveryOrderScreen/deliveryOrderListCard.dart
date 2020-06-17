@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sale_order_app/Models/deliveryOrder.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
@@ -11,10 +12,21 @@ class DOListCard extends StatelessWidget {
     Key key,
     this.deliveryOrder,
   }) : super(key: key);
+
+//date converter
+  String getDateAndTime(String rawDateAndTime) {
+    var rawDate = DateTime.tryParse(rawDateAndTime);
+    var formatter = DateFormat.yMMMMd('en_US');
+    String formatted = formatter.format(rawDate);
+    print("Date  in date formate: $formatted");
+
+    return formatted;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 8.0,
+        elevation: 8.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
         // height: 75,
@@ -25,7 +37,7 @@ class DOListCard extends StatelessWidget {
           ),
 
           // color: Colors.white,
-          
+
           margin: new EdgeInsets.symmetric(horizontal: 0.0, vertical: 0.0),
           child: Container(
             // decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
@@ -174,7 +186,8 @@ class DOListCard extends StatelessWidget {
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         fontSize: 12))
-                                                : Text("${deliveryOrder.date}",
+                                                : Text(
+                                                    "${getDateAndTime(deliveryOrder.date)}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:

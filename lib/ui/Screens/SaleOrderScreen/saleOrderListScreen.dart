@@ -82,12 +82,13 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen > {
 
     apiResponce = await soService.getSoList();
 
-    if (apiResponce.error) {
+   
+    if (apiResponce == null) {
       setState(() {
         isLoading = false;
       });
       showMessageError("Something went wrong !!!");
-      print(" ${apiResponce.errorMessage}");
+      // print(" ${apiResponce.errorMessage}");
     } else if (apiResponce.error) {
       setState(() {
         isLoading = false;
@@ -95,9 +96,11 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen > {
       showMessageError("Something went wrong !!!");
     }
 // print("${apiResponce.data.apr}");
-    setState(() {
-      isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
 
@@ -128,7 +131,32 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen > {
 
                 if (apiResponce == null) {
                   // showMessageError("Something went wrong");
-                  return Center(child: Text("Pull to refresh."));
+                  return InkWell(
+                    child: Center(
+                        child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.local_dining),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "Noting here",
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "Tap to reload",
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ],
+                    )),
+                    onTap: () {
+                      netWorkChek();
+                    },
+                  );
                 }
 
                 return _buildBody(context);
@@ -150,9 +178,9 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen > {
                   // controller: lazyListscrollController,
                   //  itemCount: globalItemsList.data.length,
                   itemCount: apiResponce.data.length,
-                  physics: ScrollPhysics(),
+                 physics: AlwaysScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  addAutomaticKeepAlives: true,
+               
                   itemBuilder: (BuildContext context, int index) {
                     // Items thisListItems = globalItemsList
                     //  .data[index];

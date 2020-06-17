@@ -7,23 +7,42 @@ import 'package:sale_order_app/config/constents.dart';
 
 class UserService {
   User user = User();
-  Future<APIResponce<User>> getUserAuth() async {
-   
-      return http.get(APIConstants.userAuthApi).then((data) {
-        if (data.statusCode == 200) {
-          final jsonDataasMap = json.decode(data.body);
+  Future<APIResponce<User>> getUserAuth(
+      String userName, String password) async {
+    final data = await http
+        .get(APIConstants.userAuthApi +
+            "UName=" +
+            userName +
+            "&Pass=" +
+            password)
+        .timeout(
+      Duration(seconds: 10),
+      onTimeout: () {
+        // time has run out, do what you wanted to do
+        print("Time out called ----====--- ::::  ");
+        return null;
+      },
+    );
 
-          user = User.fromJson(jsonDataasMap);
-          print("User auth api called :'in services' ${user.authenticatoin} :  ${user.response}");
-          return APIResponce<User>(data: user);
-        }
+    // print("User auth responce ${data.body}");
 
-        return APIResponce<User>(
-            error: true,
-            errorMessage: "An error occured in User services class !!!!!");
-      }).catchError((Object exception) => APIResponce<User>(
-           error: true,
-          errorMessage: "An error occured in sale order services class :: $exception"));
-    
+    if (data != null) {
+      if (data.statusCode == 110) {
+        return APIResponce<User>(data: user);
+      }
+      if (data.statusCode == 200) {
+        final jsonDataasMap = json.decode(data.body);
+
+        user = User.fromJson(jsonDataasMap);
+        print(
+            "User auth api called :'in services' ${user.authenticatoin} :  ${user.response}");
+        return APIResponce<User>(data: user);
+      }
+    }
+
+    return APIResponce<User>(
+        data: user,
+        error: true,
+        errorMessage: "An error occured in User services class !!!!!");
   }
 }

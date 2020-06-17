@@ -14,10 +14,11 @@ class SOService {
         final doListItems = <SaleOrder>[];
         for (var item in jsonDataasMap) {
           SaleOrder deliveryOrder = SaleOrder.fromJson(item);
-
+    print("responce body in SO service item by item  : ${deliveryOrder}");
           doListItems.add(deliveryOrder);
         }
 
+        print("List items : ${doListItems.length}");
         return APIResponce<List<SaleOrder>>(data: doListItems);
       }
 
@@ -27,6 +28,12 @@ class SOService {
     }).catchError((Object exception) => APIResponce<List<SaleOrder>>(
         error: true,
         errorMessage:
-            "An error occured in sale order services class :: $exception"));
+            "An error occured in sale order services class :: $exception")) .timeout(
+          Duration(seconds: 10),
+          onTimeout: () {
+            print("Time out Called in Sale order order service");
+            return null;
+          },
+        );
   }
 }
