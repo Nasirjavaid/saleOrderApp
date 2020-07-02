@@ -1,19 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:sale_order_app/Models/deliveryOrder.dart';
+import 'package:sale_order_app/Network/apiResponce.dart';
+import 'package:sale_order_app/Services/deliveryOrderService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
+import 'package:sale_order_app/config/methods.dart';
 import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderDetailScreenListCard.dart';
+import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderListScreen.dart';
 
-class DOListCard extends StatelessWidget {
+class DOListCard extends StatefulWidget {
   DeliveryOrder deliveryOrder;
+  
+  
+  
 
   DOListCard({
     Key key,
     this.deliveryOrder,
   }) : super(key: key);
 
-//date converter
+  @override
+  _DOListCardState createState() => _DOListCardState();
+}
+
+class _DOListCardState extends State<DOListCard> {
+  DOService get doService => GetIt.I<DOService>();
+DOListScreen doListScreen = new DOListScreen();
+
+  //Api responce call for delivery order
+  APIResponce<List<DeliveryOrder>> apiResponce;
+  //Api responce for delivery order status update
+  APIResponce<bool> updateDeliveryOrderStatusApiResponce;
+  bool updateDeliveryOrderStatusIsLoading = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  //Functions
+
+  void showMessageSuccess(String message, [MaterialColor color = Colors.blue]) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(new SnackBar(
+      backgroundColor: color,
+      content: new Text(
+        message,
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+  void showMessageError(String message, [MaterialColor color = Colors.red]) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(new SnackBar(
+      backgroundColor: color,
+      content: new Text(
+        message,
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      duration: const Duration(seconds: 1),
+    ));
+  }
+
+  Future<bool> updateDeliveryOrderStatus(int doId, int status) async {
+    setState(() {
+      updateDeliveryOrderStatusIsLoading = true;
+    });
+
+    updateDeliveryOrderStatusApiResponce =
+        await doService.updateDeliveryOrderStatus(doId, status);
+
+    if (updateDeliveryOrderStatusApiResponce.data == null) {
+      showMessageError("Something went wrong");
+      setState(() {
+        updateDeliveryOrderStatusIsLoading = false;
+      });
+      return false;
+    } else if (updateDeliveryOrderStatusApiResponce.data) {
+      showMessageSuccess("Status updated");
+      setState(() {
+        updateDeliveryOrderStatusIsLoading = false;
+      });
+      return true;
+    } else {
+      showMessageError("Something went wrong");
+      setState(() {
+        updateDeliveryOrderStatusIsLoading = false;
+      });
+      return false;
+    }
+  }
+
   String getDateAndTime(String rawDateAndTime) {
     var rawDate = DateTime.tryParse(rawDateAndTime);
     var formatter = DateFormat.yMMMMd('en_US');
@@ -26,7 +103,7 @@ class DOListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        elevation: 8.0,
+        elevation: 3.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
 
         // height: 75,
@@ -77,7 +154,7 @@ class DOListCard extends StatelessWidget {
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 12.0, bottom: 5),
-                              child: deliveryOrder.name == null
+                              child: widget.deliveryOrder.name == null
                                   ? Text(
                                       "N/A",
                                       style: TextStyle(
@@ -86,7 +163,7 @@ class DOListCard extends StatelessWidget {
                                           fontSize: 18),
                                     )
                                   : Text(
-                                      "${deliveryOrder.name}",
+                                      "${widget.deliveryOrder.name}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -146,14 +223,16 @@ class DOListCard extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: deliveryOrder.dO == null
+                                            child: widget.deliveryOrder.dO ==
+                                                    null
                                                 ? Text("N/A",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         fontSize: 12))
-                                                : Text("${deliveryOrder.dO}",
+                                                : Text(
+                                                    "${widget.deliveryOrder.dO}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -179,7 +258,8 @@ class DOListCard extends StatelessWidget {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: deliveryOrder.date == null
+                                            child: widget.deliveryOrder.date ==
+                                                    null
                                                 ? Text("--:--:--",
                                                     style: TextStyle(
                                                         color: Colors.white70,
@@ -187,7 +267,7 @@ class DOListCard extends StatelessWidget {
                                                             FontWeight.w700,
                                                         fontSize: 12))
                                                 : Text(
-                                                    "${getDateAndTime(deliveryOrder.date)}",
+                                                    "${getDateAndTime(widget.deliveryOrder.date)}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -223,7 +303,7 @@ class DOListCard extends StatelessWidget {
                           physics: ScrollPhysics(),
                           // controller: lazyListscrollController,
                           //  itemCount: globalItemsList.data.length,
-                          itemCount: deliveryOrder.items.length,
+                          itemCount: widget.deliveryOrder.items.length  ,
                           itemBuilder: (BuildContext context, int index) {
                             // Items thisListItems = globalItemsList
                             //  .data[index];
@@ -251,7 +331,7 @@ class DOListCard extends StatelessWidget {
                             //  else{
 
                             return DeliveryOrderDetailScreenListCard(
-                              items: deliveryOrder.items[index],
+                              items: widget.deliveryOrder.items[index],
                             );
                           }
                           //   },
@@ -259,8 +339,8 @@ class DOListCard extends StatelessWidget {
                           ),
                     ),
 
-                    bottomPart(context, deliveryOrder),
-                    bottomButtons(context)
+                    bottomPart(context, widget.deliveryOrder),
+                    bottomButtons(context, widget.deliveryOrder.dO)
                   ],
                 ),
 
@@ -603,7 +683,7 @@ class DOListCard extends StatelessWidget {
     ));
   }
 
-  Widget bottomButtons(BuildContext context) {
+  Widget bottomButtons(BuildContext context, int delieveryOrderId) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(top: 5.0, bottom: 5, right: 5, left: 5),
@@ -619,7 +699,26 @@ class DOListCard extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  await NetworkConnectivity.check().then((internet) async {
+                    if (internet) {
+                      bool status =
+                          await updateDeliveryOrderStatus(delieveryOrderId, 1);
+
+                      print(
+                          "value updated of delivery order status :::  $status  and do id $delieveryOrderId");
+
+                      //  if(status)
+                      //  {
+                      //    showMessageSuccess("message");
+                      //  }
+
+                    } else {
+                      //show network erro
+                      showMessageError("Network is not avalable !!!");
+                    }
+                  });
+                },
                 color: AppTheme.appBackgroundColorforCard1,
                 child: Padding(
                   padding:
@@ -637,7 +736,28 @@ class DOListCard extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
-                onPressed: () {},
+                onPressed: () async {
+                  await NetworkConnectivity.check().then((internet) async {
+               
+
+                    if (internet) {
+                      bool status =
+                          await updateDeliveryOrderStatus(delieveryOrderId, 0);
+
+                      print(
+                          "value updated of delivery order status :::  $status  and do id $delieveryOrderId");
+
+                      //  if(status)
+                      //  {
+                      //    showMessageSuccess("message");
+                      //  }
+
+                    } else {
+                      //show network erro
+                      showMessageError("Network is not avalable !!!");
+                    }
+                  });
+                },
                 color: AppTheme.appBackgroundColorforCard1,
                 child: Padding(
                   padding:

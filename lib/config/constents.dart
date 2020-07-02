@@ -1,17 +1,10 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
-
-class Constents{
-
-
+class Constents {
 // Number formater
   static var numbaerFormate = new NumberFormat("#,##0", "en_US");
 }
-
-
-
-
 
 /*
 Styles for typography
@@ -36,24 +29,25 @@ class AppTypographyStyles {
   static TextStyle headingTextStyle =
       TextStyle(color: Colors.white70, fontWeight: FontWeight.bold);
 
-  static TextStyle mainHeadingTextStyle = TextStyle(
-      fontWeight: FontWeight.w700, fontSize: 22, color: Colors.white);
+  static TextStyle mainHeadingTextStyle =
+      TextStyle(fontWeight: FontWeight.w700, fontSize: 22, color: Colors.white);
 }
 
-// TO DO : Finalize Font Family for the app
 class AppColorsStyles {
   static Color mainColorAscent = Colors.yellow;
 }
 
 class APIConstants {
-static String baseUrl ="http://192.168.88.100:8080";
- static String userAuthApi =baseUrl+"/api/login?"; 
- static String dashboardSummaryApi ="http://95.168.178.226/SOAPP/summary.json"; 
- static String deliveryOrderyApi =baseUrl+"/api/deliveryorder"; 
- static String saleOrderyApi =baseUrl+"/api/saleOrder"; 
- static String loginScreenLogoAndCompantNameApi =baseUrl+"/api/MainScreen?companyId=1"; 
-
-
+  static String baseUrl = "http://192.168.88.101:8080";
+  //static String baseUrl = "http://27.255.29.138:8080";
+  static String userAuthApi = baseUrl + "/api/login?";
+  static String dashboardSummaryApi = baseUrl + "/api/summary";
+  static String deliveryOrderyApi = baseUrl + "/api/deliveryorder";
+  static String saleOrderyApi = baseUrl + "/api/saleOrder";
+  static String deliveryOrderStatusUpdateApi = baseUrl + "/api/upadtedo?";
+  static String saleOrderStatusUpdateApi = baseUrl + "/api/upadteso?";
+  static String loginScreenLogoAndCompantNameApi =
+      baseUrl + "/api/MainScreen?companyId=1";
 }
 
 class AppColours {
@@ -65,6 +59,7 @@ enum ViewState { Idle, Busy, Retrieved, Error }
 
 class DateTimeConverter {
   String getDateAndTime(String rawDateAndTime) {
+
     var rawDate = DateTime.tryParse(rawDateAndTime);
     var formatter = new DateFormat.yMd().add_jm();
     String formatted = formatter.format(rawDate);

@@ -58,20 +58,28 @@ class Items {
   int id;
   String itemName;
   double saleAmount;
+  double rate;
+  double qty;
+  double uom;
 
-  Items({this.id,this.itemName, this.saleAmount});
+  Items({this.id, this.itemName, this.saleAmount,this.rate,this.qty,this.uom});
 
   Items.fromJson(Map<String, dynamic> json) {
-     id = json['id'];
+    id = json['id'];
     itemName = json['Item_Name'];
     saleAmount = json['Sale_Amount'];
+    qty = json['qty'];
+    uom = json['uom'];
+    rate = json['rate'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] =this.id;
+    data['id'] = this.id;
     data['Item_Name'] = this.itemName;
     data['Sale_Amount'] = this.saleAmount;
+    data["rate"] = this.rate;
+    data['qty'] = this.qty;
     return data;
   }
 }

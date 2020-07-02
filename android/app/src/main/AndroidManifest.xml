@@ -11,7 +11,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="sale_order_app"
+        android:label="Akbari Chemical Indusries(Pvt)Ltd"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

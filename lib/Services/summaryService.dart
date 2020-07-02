@@ -8,24 +8,44 @@ import 'package:sale_order_app/config/constents.dart';
 class SummaryService {
   Future<APIResponce<Summary>> getSammury() async {
     Summary sammury = Summary();
-   
-      return http.get(APIConstants.dashboardSummaryApi).then((data) {
-        if (data.statusCode == 200) {
-          final jsonDataasMap = json.decode(data.body);
-         /// print("responce body in Summary service : ${jsonDataasMap}");
-          for (var item in jsonDataasMap) {
-            sammury = Summary.fromJson(item);
-          }
-          print("responce body in Summary service : ${sammury.jan}");
-          return APIResponce<Summary>(data: sammury);
-        }
 
-        return APIResponce<Summary>(
-            error: true,
-            errorMessage: "An error occured in Sammury services class !!!!!");
-      }).catchError((_) => APIResponce<Summary>(
-          error: true,
-          errorMessage: "An error occured in Sammury services class !!!!!"));
-   
+
+
+    var data = await  http.get(APIConstants.dashboardSummaryApi).timeout(
+      Duration(seconds: 10),
+      onTimeout: () {
+        print("Time out Called in Delivery order service");
+        return null;
+      },
+    );
+
+    
+    // print("responce body in Summary service : ${jsonDataasMap}");
+
+    if (data != null) {
+      if (data.statusCode == 110) {
+        return APIResponce<Summary>(data: sammury);
+      }
+
+      if (data.statusCode == 200) {
+        final jsonDataasMap = json.decode(data.body);
+        print("responce body in Summary service : ${jsonDataasMap}");
+
+        sammury = Summary.fromJson(jsonDataasMap);
+
+        print("responce body in Summary service : ${sammury.mTD}");
+        return APIResponce<Summary>(data: sammury);
+      }
+    }
+
+    // if(data == null)
+    // {
+    //   return null;
+    // }
+
+    return APIResponce<Summary>(
+        error: true,
+        data: null,
+        errorMessage: "An error occured in Sammury services class !!!!!");
   }
 }

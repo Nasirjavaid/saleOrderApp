@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class LoginScreenLogoAndCompanyNameService {
   Future<APIResponce<LoginScreenLogoAndComapnyName>>
       getLoginScreenLogoAndCompanyName() async {
-   final data = await  http.get(APIConstants.loginScreenLogoAndCompantNameApi);
+   final data = await http.get(APIConstants.loginScreenLogoAndCompantNameApi);
 
         
           if (data.statusCode == 200) {

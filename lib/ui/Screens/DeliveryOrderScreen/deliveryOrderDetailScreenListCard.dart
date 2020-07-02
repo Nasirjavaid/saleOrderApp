@@ -11,7 +11,7 @@ class DeliveryOrderDetailScreenListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 25,
+      height: 35,
       decoration: BoxDecoration(
         // color: Colors.grey,
         // border:
@@ -24,7 +24,7 @@ class DeliveryOrderDetailScreenListCard extends StatelessWidget {
       ),
       child: InkWell(
           child: Padding(
-            padding: const EdgeInsets.only(top: 1.0, left: 3, right: 3),
+            padding: const EdgeInsets.only(top: 3.0, left: 5, right: 5),
             child: Card(
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
@@ -32,70 +32,74 @@ class DeliveryOrderDetailScreenListCard extends StatelessWidget {
                 elevation: 1,
                 margin: const EdgeInsets.symmetric(horizontal: 2),
                 child: Container(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Flexible(
-                          child: Row(
-                            children: <Widget>[
-                              // Padding(
-                              //   padding: const EdgeInsets.all(8.0),
-                              //   child: Icon(Icons.widgets,size: 20,color: AppTheme.appBackgroundColorforCard3,),
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.all(6.0),
-                                child: items.itemName == null
-                                    ? Text("N/A",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w500))
-                                    : Text("${items.itemName}",
-                                        style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w500)),
-                              ),
-                            ],
+                  color: Color(0xFFdaeff5),
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            child: items.itemName == null
+                                ? Text("N/A",
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w500))
+                                : Text("${items.itemName}",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 12.5,
+                                        fontWeight: FontWeight.w700)),
                           ),
-                          flex: 1,
-                        ),
-                        Flexible(
-                          child: Container(
-                            width: 80,
-                            // decoration: BoxDecoration(
-                            //     color: AppTheme.appBackgroundColorforCard1,
-                            //     borderRadius: BorderRadius.only(
-                            //         topLeft: Radius.circular(0.0),
-                            //         bottomRight: Radius.circular(2.0),
-                            //         bottomLeft: Radius.circular(0),
-                            //         topRight: Radius.circular(2))),
-                            height: MediaQuery.of(context).size.height,
-
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right:6.0),
-                                child: Container(
-                                  child: items.saleAmount == null
-                                      ? Text("N/A",
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 11))
-                                      : Text(
-                                          "${Constents.numbaerFormate.format(items.saleAmount)}",
-                                          style: TextStyle(
-                                              color: Colors.black87,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 11)),
-                                ),
-                              ),
-                            ),
+                          Container(
+                            child: items.qty == null || items.uom == null
+                                ? Text("N/A",
+                                    style: TextStyle(
+                                        color: Colors.black38,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10))
+                                : Text(
+                                    "${Constents.numbaerFormate.format(items.qty)+ " " + items.uom.toString()}",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12)),
                           ),
-                          flex: 1,
-                        )
-                      ]),
+                          // Text("@",
+                          //     style: TextStyle(
+                          //         color: Colors.black87,
+                          //         fontWeight: FontWeight.w600,
+                          //         fontSize: 11)),
+                          Container(
+                            child: items.rate == null
+                                ? Text("N/A",
+                                    style: TextStyle(
+                                        color: Colors.black38,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10))
+                                : Text(
+                                    "@ ${Constents.numbaerFormate.format(items.rate)}",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 12)),
+                          ),
+                          Container(
+                            child: items.saleAmount == null
+                                ? Text("N/A",
+                                    style: TextStyle(
+                                        color: Colors.black38,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 10))
+                                : Text(
+                                    "${Constents.numbaerFormate.format(items.saleAmount)}",
+                                    style: TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 12)),
+                          ),
+                        ]),
+                  ),
                 )
 
                 // subtitle: Text(
