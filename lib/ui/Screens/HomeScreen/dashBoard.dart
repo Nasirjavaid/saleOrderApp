@@ -790,7 +790,7 @@ class _DashboardBodyState extends State<DashboardBody> {
       ),
       onPressed: () {
         LoginPrefrences loginPrefrences = LoginPrefrences();
-        loginPrefrences.setUser(false);
+        loginPrefrences.setUser(0);
 
         Navigator.pushAndRemoveUntil(
             context,

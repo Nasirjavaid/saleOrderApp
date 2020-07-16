@@ -38,16 +38,17 @@ class AppColorsStyles {
 }
 
 class APIConstants {
-  static String baseUrl = "http://192.168.88.101:8080";
-  //static String baseUrl = "http://27.255.29.138:8080";
-  static String userAuthApi = baseUrl + "/api/login?";
-  static String dashboardSummaryApi = baseUrl + "/api/summary";
-  static String deliveryOrderyApi = baseUrl + "/api/deliveryorder";
-  static String saleOrderyApi = baseUrl + "/api/saleOrder";
-  static String deliveryOrderStatusUpdateApi = baseUrl + "/api/upadtedo?";
-  static String saleOrderStatusUpdateApi = baseUrl + "/api/upadteso?";
-  static String loginScreenLogoAndCompantNameApi =
-      baseUrl + "/api/MainScreen?companyId=1";
+   static String baseUrlCompany = "http://192.168.88.101:8080";
+  static String baseUrlMain ="http://27.255.29.138:8080";
+  static String userAuthApi ="/api/login?";
+  static String dashboardSummaryApi ="/api/summary";
+  static String deliveryOrderyApi ="/api/deliveryorder";
+  static String saleOrderyApi ="/api/saleOrder";
+  static String deliveryOrderStatusUpdateApi = "/api/upadtedo?";
+  static String saleOrderStatusUpdateApi ="/api/upadteso?";
+  static String loginScreenLogoAndCompantNameApi ="/api/MainScreen?companyId=1";
+
+  
 }
 
 class AppColours {
@@ -59,7 +60,6 @@ enum ViewState { Idle, Busy, Retrieved, Error }
 
 class DateTimeConverter {
   String getDateAndTime(String rawDateAndTime) {
-
     var rawDate = DateTime.tryParse(rawDateAndTime);
     var formatter = new DateFormat.yMd().add_jm();
     String formatted = formatter.format(rawDate);

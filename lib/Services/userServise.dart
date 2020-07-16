@@ -7,22 +7,49 @@ import 'package:sale_order_app/config/constents.dart';
 
 class UserService {
   User user = User();
+
+  var data;
   Future<APIResponce<User>> getUserAuth(
       String userName, String password) async {
-    final data = await http
-        .get(APIConstants.userAuthApi +
-            "UName=" +
-            userName +
-            "&Pass=" +
-            password)
-        .timeout(
-      Duration(seconds: 10),
-      onTimeout: () {
-        // time has run out, do what you wanted to do
-        print("Time out called ----====--- ::::  ");
-        return null;
-      },
-    );
+    print("Login url called = " +
+        APIConstants.baseUrlMain +
+        APIConstants.userAuthApi);
+    try {
+      data = await http
+          .get(APIConstants.baseUrlMain +
+              APIConstants.userAuthApi +
+              "UName=" +
+              userName +
+              "&Pass=" +
+              password)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          // time has run out, do what you wanted to do
+          print("Time out called ----====--- ::::  ");
+          return null;
+        },
+      );
+    } catch (_) {
+      print("Login url called = " +
+          APIConstants.baseUrlCompany +
+          APIConstants.userAuthApi);
+      data = await http
+          .get(APIConstants.baseUrlCompany +
+              APIConstants.userAuthApi +
+              "UName=" +
+              userName +
+              "&Pass=" +
+              password)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          // time has run out, do what you wanted to do
+          print("Time out called ----====--- ::::  ");
+          return null;
+        },
+      );
+    }
 
     // print("User auth responce ${data.body}");
 
@@ -30,6 +57,7 @@ class UserService {
       if (data.statusCode == 110) {
         return APIResponce<User>(data: user);
       }
+
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
 

@@ -5,9 +5,16 @@ import 'package:sale_order_app/config/constents.dart';
 import 'package:http/http.dart' as http;
 
 class SOService {
-  var doListItems ;
   Future<APIResponce<List<SaleOrder>>> getSoList() async {
-    return http.get(APIConstants.saleOrderyApi).then((data) {
+    var doListItems;
+    var data;
+    try {
+      print("Link called in saleorder service = " +
+          APIConstants.baseUrlMain +
+          APIConstants.saleOrderyApi);
+      data =
+          await http.get(APIConstants.baseUrlMain + APIConstants.saleOrderyApi);
+
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
         print("responce body in SO service : ${jsonDataasMap}");
@@ -15,7 +22,8 @@ class SOService {
         doListItems = <SaleOrder>[];
         for (var i in jsonDataasMap) {
           SaleOrder deliveryOrder = SaleOrder.fromJson(i);
-    print("responce body in SO service item by item  : ${deliveryOrder.balance_}");
+          print(
+              "responce body in SO service item by item  : ${deliveryOrder.balance_}");
           doListItems.add(deliveryOrder);
         }
 
@@ -23,47 +31,80 @@ class SOService {
         return APIResponce<List<SaleOrder>>(data: doListItems);
       }
 
-      return APIResponce<List<SaleOrder>>(
-          error: true,
-          data: doListItems,
-          errorMessage: "An error occured in SO service class !!!!!");
-    }).catchError((Object exception) => APIResponce<List<SaleOrder>>(
-        error: true,
-        errorMessage:
-            "An error occured in sale order services class :: $exception")) .timeout(
-          Duration(seconds: 10),
-          onTimeout: () {
-            print("Time out Called in Sale order order service");
-            return null;
-          },
-        );
-  }
+      // return APIResponce<List<SaleOrder>>(
+      //     error: true,
+      //     data: doListItems,
+      //     errorMessage: "An error occured in SO service class !!!!!");
+    } catch (_) {
+      print("Link called in saleorder service = " +
+          APIConstants.baseUrlCompany +
+          APIConstants.saleOrderyApi);
+      data = await http
+          .get(APIConstants.baseUrlCompany + APIConstants.saleOrderyApi);
 
+      if (data.statusCode == 200) {
+        final jsonDataasMap = json.decode(data.body);
+        print("responce body in SO service : ${jsonDataasMap}");
 
-  Future<APIResponce<bool>> updateSaleOrderStatus(
-      int soId, int stuatus) async {
-    final data = await http.get(APIConstants.saleOrderStatusUpdateApi +
-        "soID=$soId&status=$stuatus");
+        doListItems = <SaleOrder>[];
+        for (var i in jsonDataasMap) {
+          SaleOrder deliveryOrder = SaleOrder.fromJson(i);
+          print(
+              "responce body in SO service item by item  : ${deliveryOrder.balance_}");
+          doListItems.add(deliveryOrder);
+        }
 
-         print("body text in Sale Order status update service  ${data.body}");
-
-    if (data.statusCode == 200) {
-      print(" body text in Sale Order status update service  ${data.body}");
-
-      final jsonDataasMap = json.decode(data.body);
-
-      // for (var i in jsonDataasMap) {
-
-      //   familyModel =Family.fromJson(i);
-      //   print(
-      //       "Family name  ${familyModel.familyName} and family id  ${familyModel.familyId}");
-      // }
-      return APIResponce<bool>(data: jsonDataasMap);
+        print("List items : ${doListItems.length}");
+        return APIResponce<List<SaleOrder>>(data: doListItems);
+      }
     }
 
+    return APIResponce<List<SaleOrder>>(
+        error: true,
+        data: doListItems,
+        errorMessage: "An error occured in SO service class !!!!!");
+  }
+
+  Future<APIResponce<bool>> updateSaleOrderStatus(int soId, int stuatus) async {
+    var data;
+
+    try {
+      print("Link called in sale status update service " +
+          APIConstants.baseUrlMain +
+          APIConstants.saleOrderStatusUpdateApi);
+      data = await http.get(APIConstants.baseUrlMain +
+          APIConstants.saleOrderStatusUpdateApi +
+          "soID=$soId&status=$stuatus");
+
+      print("body text in Sale Order status update service  ${data.body}");
+
+      if (data.statusCode == 200) {
+        print(" body text in Sale Order status update service  ${data.body}");
+
+        final jsonDataasMap = json.decode(data.body);
+        return APIResponce<bool>(data: jsonDataasMap);
+      }
+    } catch (_) {
+      print("Link called in sale status update service " +
+          APIConstants.baseUrlCompany +
+          APIConstants.saleOrderStatusUpdateApi);
+      data = await http.get(APIConstants.baseUrlCompany +
+          APIConstants.saleOrderStatusUpdateApi +
+          "soID=$soId&status=$stuatus");
+
+      print("body text in Sale Order status update service  ${data.body}");
+
+      if (data.statusCode == 200) {
+        print(" body text in Sale Order status update service  ${data.body}");
+
+        final jsonDataasMap = json.decode(data.body);
+        return APIResponce<bool>(data: jsonDataasMap);
+      }
+    }
     return APIResponce<bool>(
         data: false,
         error: true,
-        errorMessage: "An error occured while subbmiting data in sale order update status");
+        errorMessage:
+            "An error occured while subbmiting data in sale order update status");
   }
 }

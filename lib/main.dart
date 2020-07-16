@@ -12,19 +12,15 @@ import 'package:sale_order_app/ui/Screens/HomeScreen/dashBoard.dart';
 import 'package:sale_order_app/ui/Screens/LoginScreen/loginScreen.dart';
 import 'config/appState.dart';
 
-
-void setUpLocator()
-{
-    GetIt.I.registerLazySingleton(() =>UserService());
-    GetIt.I.registerLazySingleton(() =>SummaryService());
-    GetIt.I.registerLazySingleton(() =>SOService());
-    GetIt.I.registerLazySingleton(() =>DOService());
-    GetIt.I.registerLazySingleton(() =>LoginScreenLogoAndCompanyNameService());
+void setUpLocator() {
+  GetIt.I.registerLazySingleton(() => UserService());
+  GetIt.I.registerLazySingleton(() => SummaryService());
+  GetIt.I.registerLazySingleton(() => SOService());
+  GetIt.I.registerLazySingleton(() => DOService());
+  GetIt.I.registerLazySingleton(() => LoginScreenLogoAndCompanyNameService());
 }
 
 void main() async {
-
-
   // add this, and it should be the first line in main method
   WidgetsFlutterBinding.ensureInitialized();
 //Set up locator function
@@ -34,11 +30,12 @@ void main() async {
   LoginPrefrences loginPrefrences = LoginPrefrences();
 
   // Get result of the login function.
-  bool _result = await loginPrefrences.getUser();
-  if (_result) {
+  int _result = await loginPrefrences.getUser();
+  if (_result != 0) {
+    print(
+        "User id in main file to check if we need to login or go to Dashboard = $_result");
     _defaultHome = new Dashboard();
-  } 
-
+  }
 
   // Run app!
   runApp(MaterialApp(

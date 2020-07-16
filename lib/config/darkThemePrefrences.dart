@@ -1,3 +1,4 @@
+import 'package:sale_order_app/Models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DarkThemePreference {
@@ -15,19 +16,18 @@ class DarkThemePreference {
 }
 
 class LoginPrefrences {
-
   static const USER_STATUS = "user";
 
-  setUser(bool value) async {
+  setUser(int userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    print("User sent value $value");
-    prefs.setBool(USER_STATUS, value);
+    print("User sent value && user id here $userId");
+    prefs.setInt(USER_STATUS, userId);
+   // prefs.setBool(USER_STATUS, value);
   }
 
-  Future<bool> getUser() async {
+  Future<int> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(USER_STATUS) ?? false;
+    return prefs.getInt(USER_STATUS) ?? 0;
   }
 }
-

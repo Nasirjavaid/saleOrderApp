@@ -6,20 +6,33 @@ import 'package:http/http.dart' as http;
 import 'package:sale_order_app/config/constents.dart';
 
 class SummaryService {
+  var data;
   Future<APIResponce<Summary>> getSammury() async {
     Summary sammury = Summary();
 
-
-
-    var data = await  http.get(APIConstants.dashboardSummaryApi).timeout(
-      Duration(seconds: 10),
-      onTimeout: () {
-        print("Time out Called in Delivery order service");
+    try {
+      print("Api called in Summary service  = "+APIConstants.baseUrlMain + APIConstants.dashboardSummaryApi);
+      data = await http
+          .get(APIConstants.baseUrlMain+APIConstants.dashboardSummaryApi)
+          .timeout(
+        Duration(seconds: 10),
+        onTimeout: () {
+          print(
+              "Time out Called in Delivery order service ${APIConstants.dashboardSummaryApi}");
+          return null;
+        },
+      );
+    } catch (_) {
+      print("Api called in Summary service  = http://192.168.88.101:8080" + APIConstants.dashboardSummaryApi);
+      data = await http
+          .get(APIConstants.baseUrlCompany + APIConstants.dashboardSummaryApi)
+          .timeout(Duration(seconds: 10), onTimeout: () {
+        print(
+            "Time out Called in Delivery order service ${APIConstants.dashboardSummaryApi}");
         return null;
-      },
-    );
+      });
+    }
 
-    
     // print("responce body in Summary service : ${jsonDataasMap}");
 
     if (data != null) {

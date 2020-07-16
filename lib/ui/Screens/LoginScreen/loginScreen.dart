@@ -348,7 +348,7 @@ class _LoginPageState extends State<LoginScreen> {
                 });
                 Future.delayed(const Duration(milliseconds: 1500), () {
                   if (userUth) {
-                    loginPrefrences.setUser(true);
+                    loginPrefrences.setUser(apiResponce.data.id);
 
                     Navigator.pushAndRemoveUntil(
                         context,
