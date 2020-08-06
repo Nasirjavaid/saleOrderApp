@@ -18,9 +18,9 @@ class UserService {
       data = await http
           .get(APIConstants.baseUrlMain +
               APIConstants.userAuthApi +
-              "UName=" +
+              
               userName +
-              "&Pass=" +
+              "/" +
               password)
           .timeout(
         Duration(seconds: 10),
@@ -37,9 +37,9 @@ class UserService {
       data = await http
           .get(APIConstants.baseUrlCompany +
               APIConstants.userAuthApi +
-              "UName=" +
+            
               userName +
-              "&Pass=" +
+              "/" +
               password)
           .timeout(
         Duration(seconds: 10),
@@ -63,7 +63,7 @@ class UserService {
 
         user = User.fromJson(jsonDataasMap);
         print(
-            "User auth api called :'in services' ${user.authenticatoin} :  ${user.response}");
+            "User auth api called :'in services' ${user.userId} :  ${user.userId}");
         return APIResponce<User>(data: user);
       }
     }

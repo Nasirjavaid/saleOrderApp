@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:sale_order_app/Services/LoginScreenlogoAndCompanyNameService.dart';
-import 'package:sale_order_app/Services/deliveryOrderService.dart';
+import 'package:sale_order_app/Services/deliveryChallanService.dart';
 import 'package:sale_order_app/Services/saleOrderService.dart';
 import 'package:sale_order_app/Services/summaryService.dart';
 import 'package:sale_order_app/Services/userServise.dart';
@@ -16,7 +16,7 @@ void setUpLocator() {
   GetIt.I.registerLazySingleton(() => UserService());
   GetIt.I.registerLazySingleton(() => SummaryService());
   GetIt.I.registerLazySingleton(() => SOService());
-  GetIt.I.registerLazySingleton(() => DOService());
+  GetIt.I.registerLazySingleton(() => DCService());
   GetIt.I.registerLazySingleton(() => LoginScreenLogoAndCompanyNameService());
 }
 

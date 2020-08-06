@@ -8,6 +8,7 @@ import 'package:sale_order_app/Network/apiResponce.dart';
 import 'package:sale_order_app/Services/saleOrderService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
+import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:sale_order_app/config/methods.dart';
 import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderDetailScreenListCard.dart';
 
@@ -36,7 +37,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
   void initState() {
     // TODO: implement initState
 
-    //callinf main data functon for this screen
+    //calling main data functon for this screen
     netWorkChek();
     //_fetchSammury();
 
@@ -91,13 +92,12 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
         isLoading = false;
       });
       showMessageError("Something went wrong !!!");
-      
     } else if (apiResponce.error) {
       setState(() {
         isLoading = false;
       });
-       print(" ${apiResponce.errorMessage}");
-     // showMessageError("Something went wrong !!!");
+      print(" ${apiResponce.errorMessage}");
+      // showMessageError("Something went wrong !!!");
     }
 // print("${apiResponce.data.apr}");
     if (mounted) {
@@ -113,8 +113,10 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
       updateSaleOrderStatusIsLoading = true;
     });
 
+    LoginPrefrences loginPrefrences = new LoginPrefrences();
+    int userId = await loginPrefrences.getUser();
     updateSaleOrderStatusApiResponce =
-        await soService.updateSaleOrderStatus(doId, status);
+        await soService.updateSaleOrderStatus(doId,status,userId);
 
     if (updateSaleOrderStatusApiResponce.data == null) {
       showMessageError("Something went wrong");
@@ -138,12 +140,13 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
   }
 
   String getDateAndTime(String rawDateAndTime) {
+
     var rawDate = DateTime.tryParse(rawDateAndTime);
     var formatter = DateFormat.yMMMMd('en_US');
     String formatted = formatter.format(rawDate);
     print("Date  in date formate: $formatted");
-
     return formatted;
+    
   }
 
   @override
@@ -309,7 +312,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 12.0, bottom: 5),
-                              child: saleOrder.name == null
+                              child: saleOrder.customerName == null
                                   ? Text(
                                       "N/A",
                                       style: TextStyle(
@@ -318,7 +321,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                                           fontSize: 18),
                                     )
                                   : Text(
-                                      "${saleOrder.name}",
+                                      "${saleOrder.customerName}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -378,7 +381,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: saleOrder.sO == null
+                                            child: saleOrder.saleOrderNo == null
                                                 ? Text("N/A",
                                                     style: TextStyle(
                                                         color: Colors.white70,
@@ -386,7 +389,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                                                             FontWeight.w700,
                                                         fontSize: 12))
                                                 : Text(
-                                                    "${saleOrder.sO.toString()}",
+                                                    "${saleOrder.saleOrderNo.toString()}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -412,7 +415,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: saleOrder.date == null
+                                            child: saleOrder.soDate == null
                                                 ? Text("--:--:--",
                                                     style: TextStyle(
                                                         color: Colors.white70,
@@ -420,7 +423,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                                                             FontWeight.w700,
                                                         fontSize: 12))
                                                 : Text(
-                                                    "${getDateAndTime(saleOrder.date)}",
+                                                    "${getDateAndTime(saleOrder.soDate)}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -712,7 +715,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                   bottomLeft: Radius.circular(5),
                   topRight: Radius.circular(5),
                 ),
-                gradient: saleOrder.balance_ >= 0
+                gradient: saleOrder.balanceAfterSo >= 0
                     ? LinearGradient(
                         colors: [
                           Color(0xFF43cea2),
@@ -763,14 +766,14 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: saleOrder.balance_ == null
+                          child: saleOrder.balanceAfterSo == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(saleOrder.balance_)}",
+                                  "${Constents.numbaerFormate.format(saleOrder.balanceAfterSo)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -869,7 +872,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
       context: context,
       type: AlertType.info,
       title: "Do you really want to reject this Sale Order ?",
-      desc: "${saleOrder.name}",
+      desc: "${saleOrder.customerName}",
       buttons: [
         DialogButton(
           child: Text(

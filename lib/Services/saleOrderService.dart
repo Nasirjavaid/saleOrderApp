@@ -23,7 +23,7 @@ class SOService {
         for (var i in jsonDataasMap) {
           SaleOrder deliveryOrder = SaleOrder.fromJson(i);
           print(
-              "responce body in SO service item by item  : ${deliveryOrder.balance_}");
+              "responce body in SO service item by item  : ${deliveryOrder.balanceAfterSo}");
           doListItems.add(deliveryOrder);
         }
 
@@ -50,7 +50,7 @@ class SOService {
         for (var i in jsonDataasMap) {
           SaleOrder deliveryOrder = SaleOrder.fromJson(i);
           print(
-              "responce body in SO service item by item  : ${deliveryOrder.balance_}");
+              "responce body in SO service item by item  : ${deliveryOrder.balanceAfterSo}");
           doListItems.add(deliveryOrder);
         }
 
@@ -65,7 +65,7 @@ class SOService {
         errorMessage: "An error occured in SO service class !!!!!");
   }
 
-  Future<APIResponce<bool>> updateSaleOrderStatus(int soId, int stuatus) async {
+  Future<APIResponce<bool>> updateSaleOrderStatus(int soId, int stuatus,int userId) async {
     var data;
 
     try {
@@ -74,7 +74,7 @@ class SOService {
           APIConstants.saleOrderStatusUpdateApi);
       data = await http.get(APIConstants.baseUrlMain +
           APIConstants.saleOrderStatusUpdateApi +
-          "soID=$soId&status=$stuatus");
+          "/$soId/$stuatus/$userId");
 
       print("body text in Sale Order status update service  ${data.body}");
 
@@ -100,7 +100,7 @@ class SOService {
         final jsonDataasMap = json.decode(data.body);
         return APIResponce<bool>(data: jsonDataasMap);
       }
-    }
+    } 
     return APIResponce<bool>(
         data: false,
         error: true,

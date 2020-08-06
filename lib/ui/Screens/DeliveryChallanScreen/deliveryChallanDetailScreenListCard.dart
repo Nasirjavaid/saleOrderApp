@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:sale_order_app/Models/deliveryOrder.dart';
+import 'package:sale_order_app/Models/deliveryChallan.dart';
 import 'package:sale_order_app/config/constents.dart';
 
-class DeliveryOrderDetailScreenListCard extends StatelessWidget {
+class DeliveryChallanDetailScreenListCard extends StatelessWidget {
   Items items;
-  DeliveryOrderDetailScreenListCard({
+  DeliveryChallanDetailScreenListCard({
     Key key,
     this.items,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35,
+      // height: 35,
       decoration: BoxDecoration(
         // color: Colors.grey,
         // border:
@@ -45,11 +45,16 @@ class DeliveryOrderDetailScreenListCard extends StatelessWidget {
                                         color: Colors.black54,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w500))
-                                : Text("${items.itemName}",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 12.5,
-                                        fontWeight: FontWeight.w700)),
+                                :Container(
+                                    width: 80,
+                                    child: Text("${items.itemName}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 12.5,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
                           ),
                           Container(
                             child: items.qty == null || items.uom == null
@@ -58,46 +63,49 @@ class DeliveryOrderDetailScreenListCard extends StatelessWidget {
                                         color: Colors.black38,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 10))
-                                : Text(
-                                    "${Constents.numbaerFormate.format(items.qty)+ " " + items.uom.toString()}",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12)),
+                                : Container(
+                                    width: 45,
+                                    child: Text(
+                                        "${Constents.numbaerFormate.format(items.qty) + " " + items.uom.toString()}",
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12)),
+                                  ),
                           ),
                           // Text("@",
                           //     style: TextStyle(
                           //         color: Colors.black87,
                           //         fontWeight: FontWeight.w600,
                           //         fontSize: 11)),
-                          Container(
-                            child: items.rate == null
-                                ? Text("N/A",
-                                    style: TextStyle(
-                                        color: Colors.black38,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 10))
-                                : Text(
-                                    "@ ${Constents.numbaerFormate.format(items.rate)}",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12)),
-                          ),
-                          Container(
-                            child: items.saleAmount == null
-                                ? Text("N/A",
-                                    style: TextStyle(
-                                        color: Colors.black38,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 10))
-                                : Text(
-                                    "${Constents.numbaerFormate.format(items.saleAmount)}",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 12)),
-                          ),
+                          // Container(
+                          //   child: items.rate == null
+                          //       ? Text("N/A",
+                          //           style: TextStyle(
+                          //               color: Colors.black38,
+                          //               fontWeight: FontWeight.w600,
+                          //               fontSize: 10))
+                          //       : Text(
+                          //           "@ ${Constents.numbaerFormate.format(items.rate)}",
+                          //           style: TextStyle(
+                          //               color: Colors.black87,
+                          //               fontWeight: FontWeight.w600,
+                          //               fontSize: 12)),
+                          // ),
+                          // Container(
+                          //   child: items.saleAmount == null
+                          //       ? Text("N/A",
+                          //           style: TextStyle(
+                          //               color: Colors.black38,
+                          //               fontWeight: FontWeight.w600,
+                          //               fontSize: 10))
+                          //       : Text(
+                          //           "${Constents.numbaerFormate.format(items.saleAmount)}",
+                          //           style: TextStyle(
+                          //               color: Colors.black87,
+                          //               fontWeight: FontWeight.w700,
+                          //               fontSize: 12)),
+                          // ),
                         ]),
                   ),
                 )

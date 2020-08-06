@@ -1,34 +1,34 @@
-class SaleOrder {
-  int saleOrderId;
-  int saleOrderNo;
-  String soDate;
+class DeliveryChallan {
+  int dcId;
+  int dcNo;
+  String dcDate;
   String customerName;
-  int thisSO;
+  int thisDC;
   int limit;
   int balance;
-  int balanceAfterSo;
+  int balanceAfterDC;
   List<Items> items;
 
-  SaleOrder(
-      {this.saleOrderId,
-      this.saleOrderNo,
-      this.soDate,
+  DeliveryChallan(
+      {this.dcId,
+      this.dcNo,
+      this.dcDate,
       this.customerName,
-      this.thisSO,
+      this.thisDC,
       this.limit,
       this.balance,
-      this.balanceAfterSo,
+      this.balanceAfterDC,
       this.items});
 
-  SaleOrder.fromJson(Map<String, dynamic> json) {
-    saleOrderId = json['sale_Order_Id'];
-    saleOrderNo = json['sale_Order_No'];
-    soDate = json['so_Date'];
+  DeliveryChallan.fromJson(Map<String, dynamic> json) {
+    dcId = json['dc_Id'];
+    dcNo = json['dc_No'];
+    dcDate = json['dc_Date'];
     customerName = json['customer_Name'];
-    thisSO = json['this_SO'];
+    thisDC = json['this_DC'];
     limit = json['limit'];
     balance = json['balance'];
-    balanceAfterSo = json['balance_After_So'];
+    balanceAfterDC = json['balance_After_DC'];
     if (json['items'] != null) {
       items = new List<Items>();
       json['items'].forEach((v) {
@@ -39,14 +39,14 @@ class SaleOrder {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['sale_Order_Id'] = this.saleOrderId;
-    data['sale_Order_No'] = this.saleOrderNo;
-    data['so_Date'] = this.soDate;
+    data['dc_Id'] = this.dcId;
+    data['dc_No'] = this.dcNo;
+    data['dc_Date'] = this.dcDate;
     data['customer_Name'] = this.customerName;
-    data['this_SO'] = this.thisSO;
+    data['this_DC'] = this.thisDC;
     data['limit'] = this.limit;
     data['balance'] = this.balance;
-    data['balance_After_So'] = this.balanceAfterSo;
+    data['balance_After_DC'] = this.balanceAfterDC;
     if (this.items != null) {
       data['items'] = this.items.map((v) => v.toJson()).toList();
     }
@@ -55,46 +55,38 @@ class SaleOrder {
 }
 
 class Items {
-  int saleOrderId;
-  int saleOrderItemId;
+  int dcId;
+  int dcItemId;
   String itemName;
   String itemCode;
   String uom;
   int qty;
-  int rate;
-  int amount;
 
   Items(
-      {this.saleOrderId,
-      this.saleOrderItemId,
+      {this.dcId,
+      this.dcItemId,
       this.itemName,
       this.itemCode,
       this.uom,
-      this.qty,
-      this.rate,
-      this.amount});
+      this.qty});
 
   Items.fromJson(Map<String, dynamic> json) {
-    saleOrderId = json['sale_Order_Id'];
-    saleOrderItemId = json['sale_Order_Item_Id'];
+    dcId = json['dc_Id'];
+    dcItemId = json['dc_Item_Id'];
     itemName = json['item_Name'];
     itemCode = json['item_Code'];
     uom = json['uom'];
     qty = json['qty'];
-    rate = json['rate'];
-    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['sale_Order_Id'] = this.saleOrderId;
-    data['sale_Order_Item_Id'] = this.saleOrderItemId;
+    data['dc_Id'] = this.dcId;
+    data['dc_Item_Id'] = this.dcItemId;
     data['item_Name'] = this.itemName;
     data['item_Code'] = this.itemCode;
     data['uom'] = this.uom;
     data['qty'] = this.qty;
-    data['rate'] = this.rate;
-    data['amount'] = this.amount;
     return data;
   }
 }

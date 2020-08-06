@@ -38,17 +38,16 @@ class AppColorsStyles {
 }
 
 class APIConstants {
-   static String baseUrlCompany = "http://192.168.88.101:8080";
-  static String baseUrlMain ="http://27.255.29.138:8080";
-  static String userAuthApi ="/api/login?";
-  static String dashboardSummaryApi ="/api/summary";
-  static String deliveryOrderyApi ="/api/deliveryorder";
-  static String saleOrderyApi ="/api/saleOrder";
-  static String deliveryOrderStatusUpdateApi = "/api/upadtedo?";
-  static String saleOrderStatusUpdateApi ="/api/upadteso?";
-  static String loginScreenLogoAndCompantNameApi ="/api/MainScreen?companyId=1";
-
   
+  static String baseUrlCompany = "http://192.168.88.101:1500";
+  static String baseUrlMain = "http://27.255.29.138:1500";
+  static String userAuthApi = "/api/login/";
+  static String dashboardSummaryApi = "/api/summary";
+  static String deliveryChallanApi = "/api/deliverychallan";
+  static String saleOrderyApi = "/api/saleorder";
+  static String deliveryOrderStatusUpdateApi = "/api/UpdateDC";
+  static String saleOrderStatusUpdateApi = "/api/UpdateSO";
+  static String loginScreenLogoAndCompantNameApi ="/api/MainScreen?companyId=1";
 }
 
 class AppColours {

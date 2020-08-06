@@ -1,72 +1,72 @@
 import 'dart:convert';
-import 'package:sale_order_app/Models/deliveryOrder.dart';
+import 'package:sale_order_app/Models/deliveryChallan.dart';
 import 'package:sale_order_app/Network/apiResponce.dart';
 import 'package:http/http.dart' as http;
 import 'package:sale_order_app/config/constents.dart';
 
-class DOService {
-  Future<APIResponce<List<DeliveryOrder>>> getDoList() async {
+class DCService {
+  Future<APIResponce<List<DeliveryChallan>>> getDCList() async {
     var doListItems;
     var data;
 
     try {
       print("Link called in sale order = " +
           APIConstants.baseUrlMain +
-          APIConstants.deliveryOrderyApi);
+          APIConstants.deliveryChallanApi);
       data = await http
-          .get(APIConstants.baseUrlMain + APIConstants.deliveryOrderyApi);
+          .get(APIConstants.baseUrlMain + APIConstants.deliveryChallanApi);
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
         print("responce body in Do service : ${jsonDataasMap}");
 
-        doListItems = <DeliveryOrder>[];
+        doListItems = <DeliveryChallan>[];
         for (var item in jsonDataasMap) {
-          DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(item);
+          DeliveryChallan deliveryOrder = DeliveryChallan.fromJson(item);
           print("${deliveryOrder.balance}");
           print("${deliveryOrder.limit}");
-          print("${deliveryOrder.date}");
+          print("${deliveryOrder.balanceAfterDC}");
           doListItems.add(deliveryOrder);
         }
 
-        return APIResponce<List<DeliveryOrder>>(data: doListItems);
+        return APIResponce<List<DeliveryChallan>>(data: doListItems);
       }
 
-      return APIResponce<List<DeliveryOrder>>(
+      return APIResponce<List<DeliveryChallan>>(
           error: true,
           data: doListItems,
           errorMessage: "An error occured in DO service class !!!!!");
     } catch (_) {
       print("Link called in sale order = " +
           APIConstants.baseUrlCompany +
-          APIConstants.deliveryOrderyApi);
+          APIConstants.deliveryChallanApi);
       data = await http
-          .get(APIConstants.baseUrlCompany + APIConstants.deliveryOrderyApi);
+          .get(APIConstants.baseUrlCompany + APIConstants.deliveryChallanApi);
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
         print("responce body in Do service : ${jsonDataasMap}");
 
-        doListItems = <DeliveryOrder>[];
+        doListItems = <DeliveryChallan>[];
         for (var item in jsonDataasMap) {
-          DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(item);
+          DeliveryChallan deliveryOrder = DeliveryChallan.fromJson(item);
           print("${deliveryOrder.balance}");
           print("${deliveryOrder.limit}");
-          print("${deliveryOrder.date}");
+          print("${deliveryOrder.dcDate}");
           doListItems.add(deliveryOrder);
         }
 
-        return APIResponce<List<DeliveryOrder>>(data: doListItems);
+        return APIResponce<List<DeliveryChallan>>(data: doListItems);
       }
     }
 
-    return APIResponce<List<DeliveryOrder>>(
+    return APIResponce<List<DeliveryChallan>>(
         error: true,
         data: doListItems,
         errorMessage: "An error occured in DO service class !!!!!");
   }
 
-  Future<APIResponce<bool>> updateDeliveryOrderStatus(
+  Future<APIResponce<bool>> updateDeliveryChallanStatus(
       int doId, int stuatus) async {
     var data;
     try {

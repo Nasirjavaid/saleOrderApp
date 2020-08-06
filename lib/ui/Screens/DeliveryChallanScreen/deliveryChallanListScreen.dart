@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sale_order_app/CommonWidegets/commonWidgets..dart';
-import 'package:sale_order_app/Models/deliveryOrder.dart';
+import 'package:sale_order_app/Models/deliveryChallan.dart';
 import 'package:sale_order_app/Network/apiResponce.dart';
-import 'package:sale_order_app/Services/deliveryOrderService.dart';
+import 'package:sale_order_app/Services/deliveryChallanService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
 import 'package:sale_order_app/config/methods.dart';
-import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderDetailScreenListCard.dart';
+
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanDetailScreenListCard.dart';
 
-class DOListScreen extends StatefulWidget {
+class DCListScreen extends StatefulWidget {
   @override
-  _DOListScreenState createState() => _DOListScreenState();
+  _DCListScreenState createState() => _DCListScreenState();
 }
 
-class _DOListScreenState extends State<DOListScreen> {
+class _DCListScreenState extends State<DCListScreen> {
 //Getting the delivery order sesrvice
-  DOService get doService => GetIt.I<DOService>();
+  DCService get doService => GetIt.I<DCService>();
 
   //Api responce call for delivery order
-  APIResponce<List<DeliveryOrder>> apiResponce;
+  APIResponce<List<DeliveryChallan>> apiResponce;
   //Api responce for delivery order status update
 
   bool isLoading = false;
@@ -31,7 +32,7 @@ class _DOListScreenState extends State<DOListScreen> {
       new GlobalKey<RefreshIndicatorState>();
 
   //Api responce for delivery order status update
-  APIResponce<bool> updateDeliveryOrderStatusApiResponce;
+  APIResponce<bool> updateDeliveryChallanStatusApiResponce;
   bool updateDeliveryOrderStatusIsLoading = false;
 
   @override
@@ -86,7 +87,7 @@ class _DOListScreenState extends State<DOListScreen> {
       isLoading = true;
     });
 
-    apiResponce = await doService.getDoList();
+    apiResponce = await doService.getDCList();
 
     if (apiResponce == null) {
       setState(() {
@@ -109,21 +110,21 @@ class _DOListScreenState extends State<DOListScreen> {
   }
 
   //######################################################################
-  Future<bool> updateDeliveryOrderStatus(int doId, int status) async {
+  Future<bool> updateDeliveryChallanStatus(int doId, int status) async {
     setState(() {
       updateDeliveryOrderStatusIsLoading = true;
     });
 
-    updateDeliveryOrderStatusApiResponce =
-        await doService.updateDeliveryOrderStatus(doId, status);
+    updateDeliveryChallanStatusApiResponce =
+        await doService.updateDeliveryChallanStatus(doId, status);
 
-    if (updateDeliveryOrderStatusApiResponce.data == null) {
+    if (updateDeliveryChallanStatusApiResponce.data == null) {
       showMessageError("Something went wrong");
       setState(() {
         updateDeliveryOrderStatusIsLoading = false;
       });
       return false;
-    } else if (updateDeliveryOrderStatusApiResponce.data) {
+    } else if (updateDeliveryChallanStatusApiResponce.data) {
       showMessageSuccess("Status updated");
       setState(() {
         updateDeliveryOrderStatusIsLoading = false;
@@ -155,7 +156,7 @@ class _DOListScreenState extends State<DOListScreen> {
           appBar: AppBar(
             leading: BackButton(color: Colors.black),
             title:
-                Text("Delivery order", style: TextStyle(color: Colors.black87)),
+                Text("Delivery challan", style: TextStyle(color: Colors.black87)),
             backgroundColor: Colors.white,
           ),
           // backgroundColor: Theme.of(context).colorScheme.primary,
@@ -260,7 +261,7 @@ class _DOListScreenState extends State<DOListScreen> {
     );
   }
 
-  Widget dOListCardState(DeliveryOrder deliveryOrder) {
+  Widget dOListCardState(DeliveryChallan deliveryChallan) {
     return Card(
         elevation: 3.0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -313,7 +314,7 @@ class _DOListScreenState extends State<DOListScreen> {
                             Padding(
                               padding: const EdgeInsets.only(
                                   top: 12.0, bottom: 5, left: 8, right: 8),
-                              child: deliveryOrder.name == null
+                              child: deliveryChallan.customerName == null
                                   ? Text(
                                       "N/A",
                                       style: TextStyle(
@@ -322,7 +323,7 @@ class _DOListScreenState extends State<DOListScreen> {
                                           fontSize: 16),
                                     )
                                   : Text(
-                                      "${deliveryOrder.name}",
+                                      "${deliveryChallan.customerName}",
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -364,7 +365,7 @@ class _DOListScreenState extends State<DOListScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: <Widget>[
                                 Row(children: <Widget>[
-                                  Text("DO# :",
+                                  Text("DC# :",
                                       style: TextStyle(
                                           color: Colors.white70,
                                           fontWeight: FontWeight.w500,
@@ -384,14 +385,14 @@ class _DOListScreenState extends State<DOListScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: deliveryOrder.dO == null
+                                            child: deliveryChallan.dcNo == null
                                                 ? Text("N/A",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
                                                             FontWeight.w700,
                                                         fontSize: 12))
-                                                : Text("${deliveryOrder.dO}",
+                                                : Text("${deliveryChallan.dcNo}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -417,7 +418,7 @@ class _DOListScreenState extends State<DOListScreen> {
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: deliveryOrder.date == null
+                                            child: deliveryChallan.dcDate == null
                                                 ? Text("--:--:--",
                                                     style: TextStyle(
                                                         color: Colors.white70,
@@ -425,7 +426,7 @@ class _DOListScreenState extends State<DOListScreen> {
                                                             FontWeight.w700,
                                                         fontSize: 12))
                                                 : Text(
-                                                    "${getDateAndTime(deliveryOrder.date)}",
+                                                    "${getDateAndTime(deliveryChallan.dcDate)}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -460,8 +461,8 @@ class _DOListScreenState extends State<DOListScreen> {
                           shrinkWrap: true,
                           physics: ScrollPhysics(),
                           // controller: lazyListscrollController,
-                          //  itemCount: globalItemsList.data.length,
-                          itemCount: deliveryOrder.items.length,
+                            itemCount: deliveryChallan.items.length,
+                         // itemCount: deliveryOrder.items.length,
                           itemBuilder: (BuildContext context, int index) {
                             // Items thisListItems = globalItemsList
                             //  .data[index];
@@ -488,8 +489,8 @@ class _DOListScreenState extends State<DOListScreen> {
                             //  }
                             //  else{
 
-                            return DeliveryOrderDetailScreenListCard(
-                              items: deliveryOrder.items[index],
+                            return DeliveryChallanDetailScreenListCard(
+                              items: deliveryChallan.items[index],
                             );
                           }
                           //   },
@@ -497,8 +498,8 @@ class _DOListScreenState extends State<DOListScreen> {
                           ),
                     ),
 
-                    bottomPart(context, deliveryOrder),
-                    bottomButtons(context, deliveryOrder)
+                    bottomPart(context, deliveryChallan),
+                    bottomButtons(context, deliveryChallan)
                   ],
                 ),
 
@@ -514,7 +515,7 @@ class _DOListScreenState extends State<DOListScreen> {
         ));
   }
 
-  Widget bottomPart(BuildContext context, DeliveryOrder deliveryOrder) {
+  Widget bottomPart(BuildContext context, DeliveryChallan deliveryChallan) {
     return Container(
         // decoration: BoxDecoration(
         //   // color: Colors.grey,
@@ -595,14 +596,14 @@ class _DOListScreenState extends State<DOListScreen> {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.balance == null
+                          child: deliveryChallan.balance == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.balance)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.balance)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -668,14 +669,14 @@ class _DOListScreenState extends State<DOListScreen> {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.limit == null
+                          child: deliveryChallan.limit == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.limit)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.limit)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -742,14 +743,14 @@ class _DOListScreenState extends State<DOListScreen> {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.thisDO == null
+                          child: deliveryChallan.thisDC == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.thisDO)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.thisDC)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -776,7 +777,7 @@ class _DOListScreenState extends State<DOListScreen> {
                   bottomLeft: Radius.circular(5),
                   topRight: Radius.circular(5),
                 ),
-                gradient: deliveryOrder.balance_ >= 0 ? LinearGradient(
+                gradient: deliveryChallan.balanceAfterDC >= 0 ? LinearGradient(
                     colors: [
                       Color(0xFF43cea2),
                       AppTheme.appBackgroundColorforCard1
@@ -825,14 +826,14 @@ class _DOListScreenState extends State<DOListScreen> {
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.balance_ == null
+                          child: deliveryChallan.balanceAfterDC == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.balance_)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.balanceAfterDC)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -851,7 +852,7 @@ class _DOListScreenState extends State<DOListScreen> {
     ));
   }
 
-  Widget bottomButtons(BuildContext context, DeliveryOrder deliveryOrder) {
+  Widget bottomButtons(BuildContext context, DeliveryChallan deliveryChallan) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(top: 5.0, bottom: 5, right: 5, left: 5),
@@ -871,15 +872,15 @@ class _DOListScreenState extends State<DOListScreen> {
                   await NetworkConnectivity.check().then((internet) async {
                     if (internet) {
                       bool status =
-                          await updateDeliveryOrderStatus(deliveryOrder.id, 1);
+                          await updateDeliveryChallanStatus(deliveryChallan.dcId, 1);
                       print(
-                          "value updated of delivery order status :::  $status  and do id ${deliveryOrder.id}");
+                          "value updated of delivery order status :::  $status  and do id ${deliveryChallan.dcId}");
                       if (status) {
                         print(
-                            "value updated of delivery order status :::  $status  and do id ${deliveryOrder.id}");
+                            "value updated of delivery order status :::  $status  and do id ${deliveryChallan.dcId}");
 
                         setState(() {
-                          int indexD = apiResponce.data.indexOf(deliveryOrder);
+                          int indexD = apiResponce.data.indexOf(deliveryChallan);
                           apiResponce.data.removeAt(indexD);
                           apiResponce.data.length;
                           print("List update call ${apiResponce.data.length}");
@@ -932,7 +933,7 @@ class _DOListScreenState extends State<DOListScreen> {
                   //     showMessageError("Network is not avalable !!!");
                   //   }
                   // });
-                  _onAlertButtonsPressed(deliveryOrder, context);
+                  _onAlertButtonsPressed(deliveryChallan, context);
                 },
                 color: Colors.red[300],
                 child: Padding(
@@ -949,12 +950,12 @@ class _DOListScreenState extends State<DOListScreen> {
     );
   }
 
-  _onAlertButtonsPressed(DeliveryOrder deliveryOrder, BuildContext context) {
+  _onAlertButtonsPressed(DeliveryChallan deliveryChallan, BuildContext context) {
     Alert(
       context: context,
       type: AlertType.warning,
       title: "Do you really want to reject this Delivery Order ?",
-      desc: "${deliveryOrder.name}",
+      desc: "${deliveryChallan.customerName}",
       buttons: [
         DialogButton(
           child: Text(
@@ -966,15 +967,15 @@ class _DOListScreenState extends State<DOListScreen> {
             await NetworkConnectivity.check().then((internet) async {
               if (internet) {
                 bool status =
-                    await updateDeliveryOrderStatus(deliveryOrder.id, 0);
+                    await updateDeliveryChallanStatus(deliveryChallan.dcId, 0);
                 print(
-                    "value updated of delivery order status :::  $status  and do id ${deliveryOrder.id}");
+                    "value updated of delivery order status :::  $status  and do id ${deliveryChallan.dcId}");
                 if (status) {
                   print(
-                      "value updated of delivery order status :::  $status  and do id ${deliveryOrder.id}");
+                      "value updated of delivery order status :::  $status  and do id ${deliveryChallan.dcId}");
 
                   setState(() {
-                    int indexD = apiResponce.data.indexOf(deliveryOrder);
+                    int indexD = apiResponce.data.indexOf(deliveryChallan);
                     apiResponce.data.removeAt(indexD);
                     apiResponce.data.length;
                     print(

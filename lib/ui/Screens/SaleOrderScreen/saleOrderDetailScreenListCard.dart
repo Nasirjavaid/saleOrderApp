@@ -11,7 +11,7 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 35,
+      // height: 35,
       decoration: BoxDecoration(
         // color: Colors.grey,
         // border:
@@ -45,11 +45,16 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                                         color: Colors.black54,
                                         fontSize: 10,
                                         fontWeight: FontWeight.w500))
-                                : Text("${items.itemName}",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontSize: 12.5,
-                                        fontWeight: FontWeight.w700)),
+                                : Container(
+                                    width: 80,
+                                    child: Text("${items.itemName}",
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 12.5,
+                                            fontWeight: FontWeight.w700)),
+                                  ),
                           ),
                           Container(
                             child: items.qty == null || items.uom == null
@@ -58,12 +63,15 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                                         color: Colors.black38,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 10))
-                                : Text(
-                                    "${Constents.numbaerFormate.format(items.qty) + " " + items.uom.toString()}",
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 12)),
+                                : Container(
+                                    width: 45,
+                                    child: Text(
+                                        "${Constents.numbaerFormate.format(items.qty) + " " + items.uom.toString()}",
+                                        style: TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12)),
+                                  ),
                           ),
                           // Text("@",
                           //     style: TextStyle(
@@ -85,14 +93,14 @@ class SaleOrderDetailScreenListCard extends StatelessWidget {
                                         fontSize: 12)),
                           ),
                           Container(
-                            child: items.saleAmount == null
+                            child: items.amount == null
                                 ? Text("N/A",
                                     style: TextStyle(
                                         color: Colors.black38,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 10))
                                 : Text(
-                                    "${Constents.numbaerFormate.format(items.saleAmount)}",
+                                    "${Constents.numbaerFormate.format(items.amount)}",
                                     style: TextStyle(
                                         color: Colors.black87,
                                         fontWeight: FontWeight.w700,

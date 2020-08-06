@@ -60,7 +60,7 @@ SaleOrder saleOrder;
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.only(top: 12.0, bottom: 5),
-                          child: saleOrder.name == null
+                          child: saleOrder.customerName == null
                               ? Text(
                                   "N/A",
                                   style: TextStyle(
@@ -69,7 +69,7 @@ SaleOrder saleOrder;
                                       fontSize: 18),
                                 )
                               : Text(
-                                  "${saleOrder.name}",
+                                  "${saleOrder.customerName}",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -129,14 +129,14 @@ SaleOrder saleOrder;
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 0, horizontal: 0),
                                     child: Center(
-                                        child: saleOrder.sO == null
+                                        child: saleOrder.soDate == null
                                             ? Text("N/A",
                                                 style: TextStyle(
                                                     color: Colors.white70,
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 12))
                                             : Text(
-                                                "${saleOrder.sO.toString()}",
+                                                "${saleOrder.soDate.toString()}",
                                                 style: TextStyle(
                                                     color: Colors.white70,
                                                     fontWeight: FontWeight.w700,
@@ -161,13 +161,13 @@ SaleOrder saleOrder;
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 0, horizontal: 0),
                                     child: Center(
-                                        child: saleOrder.date == null
+                                        child: saleOrder.soDate == null
                                             ? Text("--:--:--",
                                                 style: TextStyle(
                                                     color: Colors.white70,
                                                     fontWeight: FontWeight.w700,
                                                     fontSize: 12))
-                                            : Text("${saleOrder.date}",
+                                            : Text("${saleOrder.soDate}",
                                                 style: TextStyle(
                                                     color: Colors.white70,
                                                     fontWeight: FontWeight.w700,
@@ -547,11 +547,11 @@ SaleOrder saleOrder;
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: saleOrder.balance_ == null ? Text("N/A", style: TextStyle(
+                          child: saleOrder.balanceAfterSo == null ? Text("N/A", style: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500,
                                   fontSize: 12)) : Text(
-                              "${Constents.numbaerFormate.format(saleOrder.balance_)}",
+                              "${Constents.numbaerFormate.format(saleOrder.balanceAfterSo)}",
                               softWrap: false,
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,

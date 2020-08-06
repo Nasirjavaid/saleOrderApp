@@ -1,36 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:sale_order_app/Models/deliveryOrder.dart';
+import 'package:sale_order_app/Models/deliveryChallan.dart';
 import 'package:sale_order_app/Network/apiResponce.dart';
-import 'package:sale_order_app/Services/deliveryOrderService.dart';
+import 'package:sale_order_app/Services/deliveryChallanService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
 import 'package:sale_order_app/config/methods.dart';
-import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderDetailScreenListCard.dart';
-import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderListScreen.dart';
+import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanDetailScreenListCard.dart';
+import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanListScreen.dart';
 
-class DOListCard extends StatefulWidget {
-  DeliveryOrder deliveryOrder;
+
+class DCListCard extends StatefulWidget {
+  DeliveryChallan deliveryChallan;
   
   
   
 
-  DOListCard({
+  DCListCard({
     Key key,
-    this.deliveryOrder,
+    this.deliveryChallan,
   }) : super(key: key);
 
   @override
-  _DOListCardState createState() => _DOListCardState();
+  _DCListCardState createState() => _DCListCardState();
 }
 
-class _DOListCardState extends State<DOListCard> {
-  DOService get doService => GetIt.I<DOService>();
-DOListScreen doListScreen = new DOListScreen();
+class _DCListCardState extends State<DCListCard> {
+  DCService get doService => GetIt.I<DCService>();
+DCListScreen doListScreen = new DCListScreen();
 
   //Api responce call for delivery order
-  APIResponce<List<DeliveryOrder>> apiResponce;
+  APIResponce<List<DeliveryChallan>> apiResponce;
   //Api responce for delivery order status update
   APIResponce<bool> updateDeliveryOrderStatusApiResponce;
   bool updateDeliveryOrderStatusIsLoading = false;
@@ -68,7 +69,7 @@ DOListScreen doListScreen = new DOListScreen();
     });
 
     updateDeliveryOrderStatusApiResponce =
-        await doService.updateDeliveryOrderStatus(doId, status);
+        await doService.updateDeliveryChallanStatus(doId, status);
 
     if (updateDeliveryOrderStatusApiResponce.data == null) {
       showMessageError("Something went wrong");
@@ -154,7 +155,7 @@ DOListScreen doListScreen = new DOListScreen();
                             Padding(
                               padding:
                                   const EdgeInsets.only(top: 12.0, bottom: 5),
-                              child: widget.deliveryOrder.name == null
+                              child: widget.deliveryChallan.customerName == null
                                   ? Text(
                                       "N/A",
                                       style: TextStyle(
@@ -163,7 +164,7 @@ DOListScreen doListScreen = new DOListScreen();
                                           fontSize: 18),
                                     )
                                   : Text(
-                                      "${widget.deliveryOrder.name}",
+                                      "${widget.deliveryChallan.customerName}",
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -223,7 +224,7 @@ DOListScreen doListScreen = new DOListScreen();
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: widget.deliveryOrder.dO ==
+                                            child: widget.deliveryChallan.dcNo ==
                                                     null
                                                 ? Text("N/A",
                                                     style: TextStyle(
@@ -232,7 +233,7 @@ DOListScreen doListScreen = new DOListScreen();
                                                             FontWeight.w700,
                                                         fontSize: 12))
                                                 : Text(
-                                                    "${widget.deliveryOrder.dO}",
+                                                    "${widget.deliveryChallan.dcNo}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -258,7 +259,7 @@ DOListScreen doListScreen = new DOListScreen();
                                         padding: const EdgeInsets.symmetric(
                                             vertical: 0, horizontal: 0),
                                         child: Center(
-                                            child: widget.deliveryOrder.date ==
+                                            child: widget.deliveryChallan.dcDate ==
                                                     null
                                                 ? Text("--:--:--",
                                                     style: TextStyle(
@@ -267,7 +268,7 @@ DOListScreen doListScreen = new DOListScreen();
                                                             FontWeight.w700,
                                                         fontSize: 12))
                                                 : Text(
-                                                    "${getDateAndTime(widget.deliveryOrder.date)}",
+                                                    "${getDateAndTime(widget.deliveryChallan.dcDate)}",
                                                     style: TextStyle(
                                                         color: Colors.white70,
                                                         fontWeight:
@@ -303,7 +304,7 @@ DOListScreen doListScreen = new DOListScreen();
                           physics: ScrollPhysics(),
                           // controller: lazyListscrollController,
                           //  itemCount: globalItemsList.data.length,
-                          itemCount: widget.deliveryOrder.items.length  ,
+                          itemCount: widget.deliveryChallan.items.length  ,
                           itemBuilder: (BuildContext context, int index) {
                             // Items thisListItems = globalItemsList
                             //  .data[index];
@@ -330,8 +331,8 @@ DOListScreen doListScreen = new DOListScreen();
                             //  }
                             //  else{
 
-                            return DeliveryOrderDetailScreenListCard(
-                              items: widget.deliveryOrder.items[index],
+                            return DeliveryChallanDetailScreenListCard(
+                              items: widget.deliveryChallan.items[index],
                             );
                           }
                           //   },
@@ -339,8 +340,8 @@ DOListScreen doListScreen = new DOListScreen();
                           ),
                     ),
 
-                    bottomPart(context, widget.deliveryOrder),
-                    bottomButtons(context, widget.deliveryOrder.dO)
+                    bottomPart(context, widget.deliveryChallan),
+                    bottomButtons(context, widget.deliveryChallan.dcNo)
                   ],
                 ),
 
@@ -356,7 +357,7 @@ DOListScreen doListScreen = new DOListScreen();
         ));
   }
 
-  Widget bottomPart(BuildContext context, DeliveryOrder deliveryOrder) {
+  Widget bottomPart(BuildContext context, DeliveryChallan deliveryChallan) {
     return Container(
         // decoration: BoxDecoration(
         //   // color: Colors.grey,
@@ -437,14 +438,14 @@ DOListScreen doListScreen = new DOListScreen();
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.balance == null
+                          child: deliveryChallan.balance == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.balance)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.balance)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -510,14 +511,14 @@ DOListScreen doListScreen = new DOListScreen();
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.limit == null
+                          child: deliveryChallan.limit == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.limit)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.limit)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -584,14 +585,14 @@ DOListScreen doListScreen = new DOListScreen();
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.thisDO == null
+                          child: deliveryChallan.thisDC == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.thisDO)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.thisDC)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
@@ -657,14 +658,14 @@ DOListScreen doListScreen = new DOListScreen();
                         child: new SizedBox(
                           // width: 40,
                           // height: 30,
-                          child: deliveryOrder.balance_ == null
+                          child: deliveryChallan.balanceAfterDC == null
                               ? Text("N/A",
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.w500,
                                       fontSize: 12))
                               : Text(
-                                  "${Constents.numbaerFormate.format(deliveryOrder.balance_)}",
+                                  "${Constents.numbaerFormate.format(deliveryChallan.balanceAfterDC)}",
                                   softWrap: false,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,

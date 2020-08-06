@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginScreen> {
     // TODO: implement initState
     SystemChannels.textInput.invokeMethod('TextInput.hide');
 
-    getLoginScreenLogoAndCompanyName();
+   // getLoginScreenLogoAndCompanyName();
 
     super.initState();
   }
@@ -98,7 +98,7 @@ class _LoginPageState extends State<LoginScreen> {
       return false;
     }
 
-    if (apiResponce.data.response == true) {
+    if (apiResponce.data.userId > 0) {
       // showMessageError("Wrong user name or password !");
 
       if (mounted) {
@@ -145,15 +145,14 @@ class _LoginPageState extends State<LoginScreen> {
   Widget logoAndName() {
     return Builder(
       builder: (BuildContext context) {
-        if (isLoadingForLogoAndName) {
-          return CommonWidgets.progressIndicator;
-        }
+        // if (isLoadingForLogoAndName) {
+        //   return CommonWidgets.progressIndicator;
+        // }
 
-        if (apiResponceLoginScreenLogoAndCompanyName == null) {
-          return commonlogoAndNameWidget();
-        }
-
-        return dynaminlogoAndNameWidget();
+        // if (apiResponceLoginScreenLogoAndCompanyName == null) {
+        //   return commonlogoAndNameWidget();
+        // }
+        return commonlogoAndNameWidget();
       },
     );
   }
@@ -175,7 +174,8 @@ class _LoginPageState extends State<LoginScreen> {
             ),
         Text(
           "${apiResponceLoginScreenLogoAndCompanyName.data.companyName}",
-          style: Theme.of(context).textTheme.title.copyWith(color:Colors.black87),
+          style:
+              Theme.of(context).textTheme.title.copyWith(color: Colors.black87),
         )
       ]),
     );
@@ -187,7 +187,26 @@ class _LoginPageState extends State<LoginScreen> {
           height: 100,
           child: CachedNetworkImage(
               imageUrl:
-                  "https://www.visionplus.com.pk/assets/base/img/layout/logos/logo-02.png")),
+                  "https://www.aci.com.pk/images/header/akbari_logo.png",
+                  
+                  placeholder: (context, url) => Column(
+                            // crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                  height: 14,
+                                  width: 14,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  )),
+                            ],
+                          ),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                  
+                  
+                  )),
+
+                  SizedBox(height: 20),
       // Padding(
       //   padding: const EdgeInsets.all(25.0),
       //   child: Text("Vision Plus",
@@ -348,7 +367,7 @@ class _LoginPageState extends State<LoginScreen> {
                 });
                 Future.delayed(const Duration(milliseconds: 1500), () {
                   if (userUth) {
-                    loginPrefrences.setUser(apiResponce.data.id);
+                    loginPrefrences.setUser(apiResponce.data.userId);
 
                     Navigator.pushAndRemoveUntil(
                         context,

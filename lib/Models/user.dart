@@ -1,21 +1,15 @@
 class User {
-  int id;
-  String authenticatoin;
-  bool response;
+  int userId;
 
-  User({this.id,this.authenticatoin, this.response});
+  User({this.userId});
 
   User.fromJson(Map<String, dynamic> json) {
-      id =json['id'];
-    authenticatoin = json['Authenticatoin'];
-    response = json['Response'];
+    userId = json['userId'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['Authenticatoin'] = this.authenticatoin;
-    data['Response'] = this.response;
+    data['userId'] = this.userId;
     return data;
   }
 }

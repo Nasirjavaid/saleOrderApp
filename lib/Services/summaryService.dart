@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:sale_order_app/Models/sammury.dart';
 import 'package:sale_order_app/Network/apiResponce.dart';
 import 'package:http/http.dart' as http;
@@ -23,7 +22,7 @@ class SummaryService {
         },
       );
     } catch (_) {
-      print("Api called in Summary service  = http://192.168.88.101:8080" + APIConstants.dashboardSummaryApi);
+      print("Api called in Summary service  = http://192.168.88.101:1500" + APIConstants.dashboardSummaryApi);
       data = await http
           .get(APIConstants.baseUrlCompany + APIConstants.dashboardSummaryApi)
           .timeout(Duration(seconds: 10), onTimeout: () {
@@ -46,7 +45,7 @@ class SummaryService {
 
         sammury = Summary.fromJson(jsonDataasMap);
 
-        print("responce body in Summary service : ${sammury.mTD}");
+        print("responce body in Summary service : ${sammury.mtd}");
         return APIResponce<Summary>(data: sammury);
       }
     }

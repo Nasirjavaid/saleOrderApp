@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sale_order_app/CommonWidegets/commonWidgets..dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/darkThemePrefrences.dart';
-import 'package:sale_order_app/ui/Screens/DeliveryOrderScreen/deliveryOrderListScreen.dart';
+import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanListScreen.dart';
 import 'package:charts_flutter/flutter.dart' as chart;
 import 'package:sale_order_app/ui/Screens/LoginScreen/loginScreen.dart';
 import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderListScreen.dart';
@@ -12,7 +12,6 @@ import 'package:sale_order_app/Network/apiResponce.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sale_order_app/Models/sammury.dart';
 import 'package:sale_order_app/config/methods.dart';
-import 'package:connectivity/connectivity.dart';
 
 class Dashboard extends StatelessWidget {
   @override
@@ -72,11 +71,31 @@ class _DashboardBodyState extends State<DashboardBody> {
   static var chartDisplay, piChartDisplay;
   var data;
 
+  var now = new DateTime.now();
+  var current_mon;
+
+  var monthNames = [
+    "Jan",
+    "Feb",
+    "Ma",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oc",
+    "Nov",
+    "Dec"
+  ];
+
   @override
   void initState() {
     // TODO: implement initState
 
-    //callinf main data functon for this screen
+    //calling main data functon for this screen
+    current_mon = now.month.toString();
+    print("The current month is " + monthNames[now.month]);
     netWorkChek();
     //_fetchSammury();
 
@@ -128,8 +147,8 @@ class _DashboardBodyState extends State<DashboardBody> {
 
     // print("responceApi error in dashBoard ${apiResponce.data.mTD}");
 
-    if (apiResponce.data.mTD == null &&
-        apiResponce.data.yTD == null &&
+    if (apiResponce.data.mtd == null &&
+        apiResponce.data.ytd == null &&
         apiResponce.data.todaySale == null &&
         apiResponce.data.receiveable == null &&
         apiResponce.data.pendingSO == null) {
@@ -151,17 +170,17 @@ class _DashboardBodyState extends State<DashboardBody> {
     setState(() {
       var data = [
         addCahrts(
-            "Jan",
+            monthNames[now.month - 1],
             apiResponce.data.months.m1 != null
                 ? apiResponce.data.months.m1.toInt()
                 : 1),
         addCahrts(
-            "Feb",
+            monthNames[now.month],
             apiResponce.data.months.m2 != null
                 ? apiResponce.data.months.m2.toInt()
                 : 1),
         addCahrts(
-            "Mar",
+            monthNames[now.month + 1],
             apiResponce.data.months.m3 != null
                 ? apiResponce.data.months.m3.toInt()
                 : 1),
@@ -513,14 +532,14 @@ class _DashboardBodyState extends State<DashboardBody> {
                                   height: 8,
                                 ),
                                 Container(
-                                  child: apiResponce.data.mTD == null
+                                  child: apiResponce.data.mtd == null
                                       ? Text("N/A",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w800,
                                               fontSize: 15))
                                       : Text(
-                                          "${Constents.numbaerFormate.format(apiResponce.data.mTD)}",
+                                          "${Constents.numbaerFormate.format(apiResponce.data.mtd)}",
                                           softWrap: false,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
@@ -533,14 +552,14 @@ class _DashboardBodyState extends State<DashboardBody> {
                                   height: 8,
                                 ),
                                 Container(
-                                  child: apiResponce.data.yTD == null
+                                  child: apiResponce.data.ytd == null
                                       ? Text("N/A",
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.w800,
                                               fontSize: 15))
                                       : Text(
-                                          "${Constents.numbaerFormate.format(apiResponce.data.yTD)}",
+                                          "${Constents.numbaerFormate.format(apiResponce.data.ytd)}",
                                           softWrap: false,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
@@ -647,7 +666,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
-                            child: Text("Delivery Order",
+                            child: Text("Delivery Challan",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w700,
@@ -662,7 +681,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DOListScreen()));
+                                      builder: (context) => DCListScreen()));
                             } else {
                               //show network erro
                               showMessageError("Network is not avalable !!!");

@@ -3,12 +3,12 @@ import 'package:sale_order_app/config/appTheme.dart';
 
 
 
-class DODetailScreen extends StatefulWidget {
+class DCDetailScreen extends StatefulWidget {
   @override
-  _DODetailScreenState createState() => _DODetailScreenState();
+  _DCDetailScreenState createState() => _DCDetailScreenState();
 }
 
-class _DODetailScreenState extends State<DODetailScreen> {
+class _DCDetailScreenState extends State<DCDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
