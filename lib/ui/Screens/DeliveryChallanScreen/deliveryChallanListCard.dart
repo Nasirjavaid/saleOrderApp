@@ -9,10 +9,10 @@ import 'package:sale_order_app/config/constents.dart';
 import 'package:sale_order_app/config/methods.dart';
 import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanDetailScreenListCard.dart';
 import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanListScreen.dart';
-
+import 'package:sale_order_app/config/darkThemePrefrences.dart';
 
 class DCListCard extends StatefulWidget {
-  DeliveryChallan deliveryChallan;
+ final DeliveryChallan deliveryChallan;
   
   
   
@@ -33,9 +33,9 @@ DCListScreen doListScreen = new DCListScreen();
   //Api responce call for delivery order
   APIResponce<List<DeliveryChallan>> apiResponce;
   //Api responce for delivery order status update
-  APIResponce<bool> updateDeliveryOrderStatusApiResponce;
+  APIResponce<String> updateDeliveryOrderStatusApiResponce;
   bool updateDeliveryOrderStatusIsLoading = false;
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   //Functions
 
@@ -68,8 +68,11 @@ DCListScreen doListScreen = new DCListScreen();
       updateDeliveryOrderStatusIsLoading = true;
     });
 
+    LoginPrefrences loginPrefrences = new LoginPrefrences();
+    int userId = await loginPrefrences.getUser();
+
     updateDeliveryOrderStatusApiResponce =
-        await doService.updateDeliveryChallanStatus(doId, status);
+        await doService.updateDeliveryChallanStatus(doId, status,userId);
 
     if (updateDeliveryOrderStatusApiResponce.data == null) {
       showMessageError("Something went wrong");
@@ -77,13 +80,22 @@ DCListScreen doListScreen = new DCListScreen();
         updateDeliveryOrderStatusIsLoading = false;
       });
       return false;
-    } else if (updateDeliveryOrderStatusApiResponce.data) {
+    } else if (updateDeliveryOrderStatusApiResponce.data.contains("OK")) {
       showMessageSuccess("Status updated");
       setState(() {
         updateDeliveryOrderStatusIsLoading = false;
       });
       return true;
-    } else {
+    }
+    
+    else if (!updateDeliveryOrderStatusApiResponce.data.contains("OK")) {
+      showMessageSuccess("${updateDeliveryOrderStatusApiResponce.data}");
+      setState(() {
+        updateDeliveryOrderStatusIsLoading = false;
+      });
+      return false;
+    } 
+     else {
       showMessageError("Something went wrong");
       setState(() {
         updateDeliveryOrderStatusIsLoading = false;

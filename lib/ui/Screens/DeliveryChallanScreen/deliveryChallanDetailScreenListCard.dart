@@ -3,7 +3,7 @@ import 'package:sale_order_app/Models/deliveryChallan.dart';
 import 'package:sale_order_app/config/constents.dart';
 
 class DeliveryChallanDetailScreenListCard extends StatelessWidget {
-  Items items;
+ final Items items;
   DeliveryChallanDetailScreenListCard({
     Key key,
     this.items,

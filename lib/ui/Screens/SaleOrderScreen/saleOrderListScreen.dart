@@ -30,13 +30,11 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
       new GlobalKey<RefreshIndicatorState>();
 
   //Api responce for delivery order status update
-  APIResponce<bool> updateSaleOrderStatusApiResponce;
+  APIResponce<String> updateSaleOrderStatusApiResponce;
   bool updateSaleOrderStatusIsLoading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
-
     //calling main data functon for this screen
     netWorkChek();
     //_fetchSammury();
@@ -64,7 +62,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
         message,
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     ));
   }
 
@@ -75,7 +73,7 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
         message,
         style: TextStyle(fontWeight: FontWeight.w700),
       ),
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2),
     ));
   }
 
@@ -108,15 +106,17 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
   }
 
   //######################################################################
-  Future<bool> updateSaleOrderStatus(int doId, int status) async {
+  Future<bool> updateSaleOrderStatus(int soId, int status) async {
     setState(() {
       updateSaleOrderStatusIsLoading = true;
     });
 
     LoginPrefrences loginPrefrences = new LoginPrefrences();
     int userId = await loginPrefrences.getUser();
+    print(
+        "User id in main for updating sale order with user id : $userId and status is $status with this sale order id $soId");
     updateSaleOrderStatusApiResponce =
-        await soService.updateSaleOrderStatus(doId,status,userId);
+        await soService.updateSaleOrderStatus(soId, status, userId);
 
     if (updateSaleOrderStatusApiResponce.data == null) {
       showMessageError("Something went wrong");
@@ -124,12 +124,18 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
         updateSaleOrderStatusIsLoading = false;
       });
       return false;
-    } else if (updateSaleOrderStatusApiResponce.data) {
+    } else if (updateSaleOrderStatusApiResponce.data.contains("OK")) {
       showMessageSuccess("Status updated");
       setState(() {
         updateSaleOrderStatusIsLoading = false;
       });
       return true;
+    } else if (!updateSaleOrderStatusApiResponce.data.contains("OK")) {
+      showMessageSuccess("${updateSaleOrderStatusApiResponce.data}");
+      setState(() {
+        updateSaleOrderStatusIsLoading = false;
+      });
+      return false;
     } else {
       showMessageError("Something went wrong");
       setState(() {
@@ -140,13 +146,11 @@ class _SaleOrderListScreenState extends State<SaleOrderListScreen> {
   }
 
   String getDateAndTime(String rawDateAndTime) {
-
     var rawDate = DateTime.tryParse(rawDateAndTime);
     var formatter = DateFormat.yMMMMd('en_US');
     String formatted = formatter.format(rawDate);
     print("Date  in date formate: $formatted");
     return formatted;
-    
   }
 
   @override

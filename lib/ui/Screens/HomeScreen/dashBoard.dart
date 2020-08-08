@@ -1,5 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:sale_order_app/CommonWidegets/commonWidgets..dart';
+import 'package:sale_order_app/Models/ytdSale.dart';
+import 'package:sale_order_app/Services/ytdSaleService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanListScreen.dart';
@@ -45,18 +49,20 @@ class DashboardBody extends StatefulWidget {
   _DashboardBodyState createState() => _DashboardBodyState();
 }
 
-class addCahrts {
-  final String label;
-  final int value;
-  addCahrts(this.label, this.value);
+class AddCharts {
+  String label;
+  int value;
+  AddCharts(this.label, this.value);
 }
 
 class _DashboardBodyState extends State<DashboardBody> {
   //Getting user service to get Summary
   SummaryService get summaryService => GetIt.I<SummaryService>();
+  YTDSaleService get ytdSaleService => GetIt.I<YTDSaleService>();
 
   //Api responce call for Summary
   APIResponce<Summary> apiResponce;
+  APIResponce<List<YTDSale>> apiResponceYTDsale;
   bool isLoading = false;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -68,36 +74,19 @@ class _DashboardBodyState extends State<DashboardBody> {
   String actualDropdown = DashboardBody.chartDropdownItems[0];
 
   int actualChart = 0;
-  static var chartDisplay, piChartDisplay;
+  static var chartDisplay;
   var data;
 
   var now = new DateTime.now();
   var current_mon;
 
-  var monthNames = [
-    "Jan",
-    "Feb",
-    "Ma",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oc",
-    "Nov",
-    "Dec"
-  ];
+ 
 
   @override
   void initState() {
-    // TODO: implement initState
-
     //calling main data functon for this screen
-    current_mon = now.month.toString();
-    print("The current month is " + monthNames[now.month]);
+    
     netWorkChek();
-    //_fetchSammury();
 
     super.initState();
   }
@@ -107,6 +96,7 @@ class _DashboardBodyState extends State<DashboardBody> {
       // clear past user
 
       if (internet) {
+        _fetchYTDsaleListOfMonths();
         _fetchSammury();
       } else {
         //show network erro
@@ -137,6 +127,58 @@ class _DashboardBodyState extends State<DashboardBody> {
     ));
   }
 
+//fetch ytdSale list of months
+
+  _fetchYTDsaleListOfMonths() async {
+    apiResponceYTDsale = await ytdSaleService.getYTDSaleList();
+
+    // print("responceApi error in dashBoard ${apiResponce.data.mTD}");
+
+    if (apiResponceYTDsale.data.length == null) {
+      // setState(() {
+      //   isLoading = false;
+      // });
+      showMessageError("Something went wrong !!!");
+    } else if (apiResponceYTDsale.error) {
+      // setState(() {
+      //   isLoading = false;
+      // });
+      showMessageError("Something went wrong !!!");
+    }
+// print("${apiResponce.data.apr}");
+    // setState(() {
+    //   isLoading = false;
+    // });
+
+//TODO: Graph Work is still  pending //
+
+    var graphData = <AddCharts>[];
+    AddCharts adChartsObj;
+    for (int i = 0; i < apiResponceYTDsale.data.length; i++) {
+      adChartsObj = AddCharts(
+          apiResponceYTDsale.data[i].month, apiResponceYTDsale.data[i].amount);
+
+      graphData.add(adChartsObj);
+    }
+    setState(() {
+      var series = [
+        chart.Series(
+            domainFn: (AddCharts adChartsObj, _) => adChartsObj.label,
+            measureFn: (AddCharts adChartsObj, _) => adChartsObj.value,
+            id: "AddCahrts",
+            data: graphData
+            // data:  charts[actualChart],
+
+            )
+      ];
+
+      chartDisplay = chart.BarChart(
+        series,
+        animationDuration: Duration(seconds: 1),
+      );
+    });
+  }
+
 // fetching the Dashboard data
   _fetchSammury() async {
     setState(() {
@@ -165,88 +207,6 @@ class _DashboardBodyState extends State<DashboardBody> {
 // print("${apiResponce.data.apr}");
     setState(() {
       isLoading = false;
-    });
-
-    setState(() {
-      var data = [
-        addCahrts(
-            monthNames[now.month - 1],
-            apiResponce.data.months.m1 != null
-                ? apiResponce.data.months.m1.toInt()
-                : 1),
-        addCahrts(
-            monthNames[now.month],
-            apiResponce.data.months.m2 != null
-                ? apiResponce.data.months.m2.toInt()
-                : 1),
-        addCahrts(
-            monthNames[now.month + 1],
-            apiResponce.data.months.m3 != null
-                ? apiResponce.data.months.m3.toInt()
-                : 1),
-        addCahrts(
-            "Apr",
-            apiResponce.data.months.m4 != null
-                ? apiResponce.data.months.m4.toInt()
-                : 1),
-        addCahrts(
-            "May",
-            apiResponce.data.months.m5 != null
-                ? apiResponce.data.months.m5.toInt()
-                : 1),
-        addCahrts(
-            "jun",
-            apiResponce.data.months.m6 != null
-                ? apiResponce.data.months.m6.toInt()
-                : 1),
-        addCahrts(
-            "jul",
-            apiResponce.data.months.m7 != null
-                ? apiResponce.data.months.m7.toInt()
-                : 1),
-        addCahrts(
-            "Aug",
-            apiResponce.data.months.m8 != null
-                ? apiResponce.data.months.m8.toInt()
-                : 1),
-        addCahrts(
-            "Sep",
-            apiResponce.data.months.m9 != null
-                ? apiResponce.data.months.m9.toInt()
-                : 1),
-        addCahrts(
-            "Oct",
-            apiResponce.data.months.m10 != null
-                ? apiResponce.data.months.m10.toInt()
-                : 1),
-        addCahrts(
-            "Nov",
-            apiResponce.data.months.m11 != null
-                ? apiResponce.data.months.m11.toInt()
-                : 1),
-        addCahrts(
-            "Dec",
-            apiResponce.data.months.m12 != null
-                ? apiResponce.data.months.m12.toInt()
-                : 1),
-      ];
-      // data =  charts[actualChart];
-
-      var series = [
-        chart.Series(
-            domainFn: (addCahrts addcharts, _) => addcharts.label,
-            measureFn: (addCahrts addcharts, _) => addcharts.value,
-            id: "AddCahrts",
-            data: data
-            // data:  charts[actualChart],
-
-            )
-      ];
-
-      chartDisplay = chart.BarChart(
-        series,
-        animationDuration: Duration(microseconds: 2000),
-      );
     });
   }
 
@@ -719,7 +679,10 @@ class _DashboardBodyState extends State<DashboardBody> {
               ),
             ),
 
-            Container(height: 200, child: chartDisplay)
+            Container(
+                width: MediaQuery.of(context).size.width,
+                height: 230,
+                child: chartDisplay)
             //                 // Sparkline(
             //                 //   data: charts[actualChart],
             //                 //   lineWidth: 5.0,

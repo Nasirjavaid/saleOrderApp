@@ -19,7 +19,7 @@ class LoginScreenLogoAndCompanyNameService {
         final jsonDataasMap = json.decode(data.body);
         LoginScreenLogoAndComapnyName loginScreenLogoAndComapnyName;
         for (var item in jsonDataasMap) {
-          print("responce body in  loginScreenLogoAndComapnyName : ${item}");
+          print("responce body in  loginScreenLogoAndComapnyName : $item");
 
           loginScreenLogoAndComapnyName =
               LoginScreenLogoAndComapnyName.fromJson(item);
@@ -43,7 +43,7 @@ class LoginScreenLogoAndCompanyNameService {
         final jsonDataasMap = json.decode(data.body);
         LoginScreenLogoAndComapnyName loginScreenLogoAndComapnyName;
         for (var item in jsonDataasMap) {
-          print("responce body in  loginScreenLogoAndComapnyName : ${item}");
+          print("responce body in  loginScreenLogoAndComapnyName : $item");
 
           loginScreenLogoAndComapnyName =
               LoginScreenLogoAndComapnyName.fromJson(item);

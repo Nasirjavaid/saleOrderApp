@@ -60,7 +60,7 @@ class Items {
   String itemName;
   String itemCode;
   String uom;
-  int qty;
+  var qty;
 
   Items(
       {this.dcId,

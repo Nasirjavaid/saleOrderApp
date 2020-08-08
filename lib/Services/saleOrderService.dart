@@ -17,7 +17,7 @@ class SOService {
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
-        print("responce body in SO service : ${jsonDataasMap}");
+        print("responce body in SO service : $jsonDataasMap");
 
         doListItems = <SaleOrder>[];
         for (var i in jsonDataasMap) {
@@ -44,7 +44,7 @@ class SOService {
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
-        print("responce body in SO service : ${jsonDataasMap}");
+        print("responce body in SO service : $jsonDataasMap");
 
         doListItems = <SaleOrder>[];
         for (var i in jsonDataasMap) {
@@ -65,7 +65,8 @@ class SOService {
         errorMessage: "An error occured in SO service class !!!!!");
   }
 
-  Future<APIResponce<bool>> updateSaleOrderStatus(int soId, int stuatus,int userId) async {
+  Future<APIResponce<String>> updateSaleOrderStatus(
+      int soId, int stuatus, int userId) async {
     var data;
 
     try {
@@ -82,7 +83,10 @@ class SOService {
         print(" body text in Sale Order status update service  ${data.body}");
 
         final jsonDataasMap = json.decode(data.body);
-        return APIResponce<bool>(data: jsonDataasMap);
+        String status = jsonDataasMap["status"];
+        print(
+            " body text in Sale Order status update service after decode  $jsonDataasMap");
+        return APIResponce<String>(data: status);
       }
     } catch (_) {
       print("Link called in sale status update service " +
@@ -90,19 +94,20 @@ class SOService {
           APIConstants.saleOrderStatusUpdateApi);
       data = await http.get(APIConstants.baseUrlCompany +
           APIConstants.saleOrderStatusUpdateApi +
-          "soID=$soId&status=$stuatus");
+          "/$soId/$stuatus/$userId");
 
       print("body text in Sale Order status update service  ${data.body}");
 
       if (data.statusCode == 200) {
-        print(" body text in Sale Order status update service  ${data.body}");
-
         final jsonDataasMap = json.decode(data.body);
-        return APIResponce<bool>(data: jsonDataasMap);
+        String status = jsonDataasMap["status"];
+        print(
+            " body text in Sale Order status update service after decode  $jsonDataasMap");
+        return APIResponce<String>(data: status);
       }
-    } 
-    return APIResponce<bool>(
-        data: false,
+    }
+    return APIResponce<String>(
+        data: "Error occurred",
         error: true,
         errorMessage:
             "An error occured while subbmiting data in sale order update status");

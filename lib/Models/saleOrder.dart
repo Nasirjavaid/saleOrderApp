@@ -61,7 +61,7 @@ class Items {
   String itemCode;
   String uom;
   int qty;
-  int rate;
+  var rate;
   int amount;
 
   Items(

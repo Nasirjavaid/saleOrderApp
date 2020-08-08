@@ -18,7 +18,7 @@ class DCService {
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
-        print("responce body in Do service : ${jsonDataasMap}");
+        print("responce body in Do service : $jsonDataasMap");
 
         doListItems = <DeliveryChallan>[];
         for (var item in jsonDataasMap) {
@@ -45,7 +45,7 @@ class DCService {
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
-        print("responce body in Do service : ${jsonDataasMap}");
+        print("responce body in Do service : $jsonDataasMap");
 
         doListItems = <DeliveryChallan>[];
         for (var item in jsonDataasMap) {
@@ -66,8 +66,8 @@ class DCService {
         errorMessage: "An error occured in DO service class !!!!!");
   }
 
-  Future<APIResponce<bool>> updateDeliveryChallanStatus(
-      int doId, int stuatus) async {
+  Future<APIResponce<String>> updateDeliveryChallanStatus(
+      int dcId, int stuatus,int userId) async {
     var data;
     try {
       print("link called in delivery order status change = " +
@@ -75,14 +75,16 @@ class DCService {
           APIConstants.deliveryOrderStatusUpdateApi);
       data = await http.get(APIConstants.baseUrlMain +
           APIConstants.deliveryOrderStatusUpdateApi +
-          "doID=$doId&status=$stuatus");
+           "/$dcId/$stuatus/$userId");
+
       print("body text in Delivery Order status update service  ${data.body}");
       if (data.statusCode == 200) {
         print(
             "body text in Delivery Order status update service  ${data.body}");
 
         final jsonDataasMap = json.decode(data.body);
-        return APIResponce<bool>(data: jsonDataasMap);
+         String status = jsonDataasMap["status"];
+        return APIResponce<String>(data: status);
       }
     } catch (_) {
       
@@ -92,19 +94,20 @@ class DCService {
 
       data = await http.get(APIConstants.baseUrlCompany +
           APIConstants.deliveryOrderStatusUpdateApi +
-          "doID=$doId&status=$stuatus");
+           "/$dcId/$stuatus/$userId");
       print("body text in Delivery Order status update service  ${data.body}");
       if (data.statusCode == 200) {
         print(
             "body text in Delivery Order status update service  ${data.body}");
 
         final jsonDataasMap = json.decode(data.body);
-        return APIResponce<bool>(data: jsonDataasMap);
+         String status = jsonDataasMap["status"];
+        return APIResponce<String>(data: status);
       }
     }
 
-    return APIResponce<bool>(
-        data: false,
+    return APIResponce<String>(
+        data: "Error occurred",
         error: true,
         errorMessage:
             "An error occured while subbmiting data in delivery order update status");

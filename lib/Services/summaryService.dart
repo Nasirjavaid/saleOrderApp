@@ -41,7 +41,7 @@ class SummaryService {
 
       if (data.statusCode == 200) {
         final jsonDataasMap = json.decode(data.body);
-        print("responce body in Summary service : ${jsonDataasMap}");
+        print("responce body in Summary service : $jsonDataasMap");
 
         sammury = Summary.fromJson(jsonDataasMap);
 

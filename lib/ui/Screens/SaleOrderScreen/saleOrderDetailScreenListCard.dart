@@ -3,7 +3,7 @@ import 'package:sale_order_app/Models/saleOrder.dart';
 import 'package:sale_order_app/config/constents.dart';
 
 class SaleOrderDetailScreenListCard extends StatelessWidget {
-  Items items;
+ final Items items;
   SaleOrderDetailScreenListCard({
     Key key,
     this.items,

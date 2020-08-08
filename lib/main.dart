@@ -6,6 +6,7 @@ import 'package:sale_order_app/Services/deliveryChallanService.dart';
 import 'package:sale_order_app/Services/saleOrderService.dart';
 import 'package:sale_order_app/Services/summaryService.dart';
 import 'package:sale_order_app/Services/userServise.dart';
+import 'package:sale_order_app/Services/ytdSaleService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:sale_order_app/ui/Screens/HomeScreen/dashBoard.dart';
@@ -13,11 +14,14 @@ import 'package:sale_order_app/ui/Screens/LoginScreen/loginScreen.dart';
 import 'config/appState.dart';
 
 void setUpLocator() {
+
   GetIt.I.registerLazySingleton(() => UserService());
   GetIt.I.registerLazySingleton(() => SummaryService());
   GetIt.I.registerLazySingleton(() => SOService());
   GetIt.I.registerLazySingleton(() => DCService());
+  GetIt.I.registerLazySingleton(() => YTDSaleService());
   GetIt.I.registerLazySingleton(() => LoginScreenLogoAndCompanyNameService());
+  
 }
 
 void main() async {

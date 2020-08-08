@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sale_order_app/CommonWidegets/commonWidgets..dart';
 import 'package:sale_order_app/Models/loginScreenlogoAndCompanyName.dart';
 import 'package:sale_order_app/Services/loginScreenLogoAndCompanyNameService.dart';
 import 'package:sale_order_app/Models/user.dart';

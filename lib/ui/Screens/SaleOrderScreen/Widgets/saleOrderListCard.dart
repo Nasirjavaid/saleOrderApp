@@ -6,7 +6,7 @@ import 'package:sale_order_app/ui/Screens/SaleOrderScreen/saleOrderDetailScreenL
 
 class SOListCard extends StatelessWidget {
 
-SaleOrder saleOrder;
+final SaleOrder saleOrder;
   SOListCard({
     Key key,
      this.saleOrder,

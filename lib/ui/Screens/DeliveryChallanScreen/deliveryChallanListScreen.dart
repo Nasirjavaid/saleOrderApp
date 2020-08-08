@@ -7,7 +7,7 @@ import 'package:sale_order_app/Services/deliveryChallanService.dart';
 import 'package:sale_order_app/config/appTheme.dart';
 import 'package:sale_order_app/config/constents.dart';
 import 'package:sale_order_app/config/methods.dart';
-
+import 'package:sale_order_app/config/darkThemePrefrences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sale_order_app/ui/Screens/DeliveryChallanScreen/deliveryChallanDetailScreenListCard.dart';
@@ -32,12 +32,12 @@ class _DCListScreenState extends State<DCListScreen> {
       new GlobalKey<RefreshIndicatorState>();
 
   //Api responce for delivery order status update
-  APIResponce<bool> updateDeliveryChallanStatusApiResponce;
+  APIResponce<String> updateDeliveryChallanStatusApiResponce;
   bool updateDeliveryOrderStatusIsLoading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
+   
 
     //callinf main data functon for this screen
     netWorkChek();
@@ -115,8 +115,10 @@ class _DCListScreenState extends State<DCListScreen> {
       updateDeliveryOrderStatusIsLoading = true;
     });
 
+ LoginPrefrences loginPrefrences = new LoginPrefrences();
+    int userId = await loginPrefrences.getUser();
     updateDeliveryChallanStatusApiResponce =
-        await doService.updateDeliveryChallanStatus(doId, status);
+        await doService.updateDeliveryChallanStatus(doId, status,userId);
 
     if (updateDeliveryChallanStatusApiResponce.data == null) {
       showMessageError("Something went wrong");
@@ -124,12 +126,18 @@ class _DCListScreenState extends State<DCListScreen> {
         updateDeliveryOrderStatusIsLoading = false;
       });
       return false;
-    } else if (updateDeliveryChallanStatusApiResponce.data) {
+    } else if (updateDeliveryChallanStatusApiResponce.data.contains("OK")) {
       showMessageSuccess("Status updated");
       setState(() {
         updateDeliveryOrderStatusIsLoading = false;
       });
       return true;
+    } else if (!updateDeliveryChallanStatusApiResponce.data.contains("OK")) {
+      showMessageSuccess("${updateDeliveryChallanStatusApiResponce.data}");
+      setState(() {
+        updateDeliveryOrderStatusIsLoading = false;
+      });
+      return false;
     } else {
       showMessageError("Something went wrong");
       setState(() {

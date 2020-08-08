@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sale_order_app/ui/Screens/SettingScreen/settings.dart';
+
 
 class SaleOrderForm extends StatefulWidget {
   @override
@@ -19,37 +19,12 @@ class _SaleOrderFormState extends State<SaleOrderForm> {
     'Item 5'
   ];
 
-  static final List<String> itemsSalesTaxList = [
-    '10',
-    '20',
-    '30',
-    '40',
-    '50'
-  ];
+  
 
-  static final List<String> itemsTotalAmountList = [
-    '100',
-    '200',
-    '300',
-    '400',
-    '500'
-  ];
 
-  static final List<String> itemRateList = [
-    '500',
-    '1000',
-    '2000',
-    '3000',
-    '4000'
-  ];
 
-  static final List<String> itemsDecriptionList = [
-    'Item 1 Description selected',
-    'Item 2 Description selected',
-    'Item 3 Description selected',
-    'Item 4 Description selected',
-    'Item 5 Description selected'
-  ];
+
+
   // String actualDropdown = dropdownItemsList[0];
   int actualChart;
 
