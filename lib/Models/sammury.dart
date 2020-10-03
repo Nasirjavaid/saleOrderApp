@@ -1,7 +1,7 @@
 class Summary {
   double todaySale;
   double mtd;
-  int ytd;
+  double ytd;
   double receiveable;
   double pendingSO;
   Months months;
@@ -42,9 +42,9 @@ class Months {
   int m1;
   double m2;
   double m3;
-  int m4;
-  int m5;
-  int m6;
+  double m4;
+  double m5;
+  double m6;
   double m7;
   double m8;
   double m9;

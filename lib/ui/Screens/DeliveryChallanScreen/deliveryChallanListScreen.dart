@@ -181,7 +181,7 @@ class _DCListScreenState extends State<DCListScreen> {
                   return CommonWidgets.progressIndicator;
                 }
 
-                if (apiResponce == null || apiResponce.data.length == 0) {
+                if (apiResponce == null ) {
                   // showMessageError("Something went wrong");
                   return InkWell(
                     child: Center(
@@ -229,7 +229,7 @@ class _DCListScreenState extends State<DCListScreen> {
             // controller: lazyListscrollController,
             //  itemCount: globalItemsList.data.length,
 
-            itemCount: apiResponce.data.length,
+            itemCount:  apiResponce.data.length,
             itemBuilder: (BuildContext context, int index) {
               // Items thisListItems = globalItemsList
               //  .data[index];
@@ -255,6 +255,9 @@ class _DCListScreenState extends State<DCListScreen> {
               // );
               //  }
               //  else{
+
+
+                
 
               return dOListCardState(apiResponce.data[index]);
 

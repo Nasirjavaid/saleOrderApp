@@ -562,7 +562,7 @@ class _DashboardBodyState extends State<DashboardBody> {
                                 Container(
                                   child: apiResponce != null
                                       ? Text(
-                                          "${Constents.numbaerFormate.format(apiResponce.data.pendingSO)}",
+                                          "${Constents.numbaerFormate.format(apiResponce.data.pendingSO == null ? 0 : apiResponce.data.pendingSO)}",
                                           softWrap: false,
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
